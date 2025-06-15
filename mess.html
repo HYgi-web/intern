@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Mess Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: normal;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .main-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .menu-section {
+            background: linear-gradient(135deg, #8B7ED8, #9B8CE8);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .menu-title {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .menu-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #D3D3D3;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .menu-table td {
+            border: 1px solid #999;
+            height: 40px;
+            width: 14.28%;
+        }
+
+        .complaint-section {
+            margin-top: 30px;
+        }
+
+        .complaint-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .complaint-subtitle {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .complaint-text {
+            width: 100%;
+            height: 120px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            resize: vertical;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .complaint-text::placeholder {
+            color: #999;
+            line-height: 1.5;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .add-image-btn {
+            background: #6B73FF;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .add-image-btn:hover {
+            background: #5A63E6;
+        }
+
+        .submit-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .submit-btn:hover {
+            background: #45a049;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .button-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Student Dashboard</h1>
+            <button class="logout-btn" onclick="handleLogout()" >Logout</button>
+        </div>
+
+    <div class="main-container">
+        <h2 class="title">Hostel Mess</h2>
+        
+        <div class="menu-section">
+            <div class="menu-title">Menu</div>
+            <table class="menu-table">
+                <tr>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                    <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="complaint-section">
+            <h3 class="complaint-title">Have a Complaint?</h3>
+            <p class="complaint-subtitle">Please share</p>
+            
+            <form>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="rollno">Roll No.</label>
+                        <input type="text" id="rollno" name="rollno" placeholder="Enter your roll number">
+                    </div>
+                </div>
+                
+                <textarea class="complaint-text" placeholder="1. Enter your query
+                        2. Be precise
+                        3. Add images for evidence"></textarea>
+                
+                <div class="button-row">
+                    <button type="button" class="add-image-btn">
+                        Add Image +
+                    </button>
+                    <button type="submit" class="submit-btn">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    function handleLogout() {
+        if (confirm('Are you sure you want to logout?')) {
+            alert('Logging out...');
+            // In a real application, this would redirect to login page
+        }
+    }
+
+    
+        document.querySelector("form").addEventListener("submit", function(e) {
+            e.preventDefault(); // Prevent default form submission
+        
+            const name = document.getElementById("name").value.trim();
+            const rollno = document.getElementById("rollno").value.trim();
+            const complaint = document.querySelector(".complaint-text").value.trim();
+        
+            if (!name || !rollno || !complaint) {
+                alert("Please fill all fields.");
+                return;
+            }
+        
+            fetch("YOUR_WEB_APP_URL", {  //create web app on google sheets and paste the url
+                method: "POST",
+                body: JSON.stringify({
+                    name: name,
+                    rollno: rollno,
+                    complaint: complaint
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert("Complaint submitted successfully!");
+                    document.querySelector("form").reset();
+                } else {
+                    alert("Error submitting complaint.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Something went wrong.");
+            });
+        });
+     
+        
+</script>
+</html>

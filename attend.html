@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        .month-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 8px;
+        }
+
+        .month-dropdown {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 8px 12px;
+            gap: 8px;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .month-dropdown:hover {
+            border-color: #6c757d;
+        }
+
+        .calendar-icon {
+            width: 16px;
+            height: 16px;
+            background: #6c757d;
+            border-radius: 2px;
+        }
+
+        .month-select {
+            background: none;
+            border: none;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .select-month-text {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .last-updated {
+            color: #6c757d;
+            font-size: 12px;
+            margin-bottom: 30px;
+        }
+
+        .attendance-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e9ecef;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .attendance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .total-days-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .total-days-label {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .total-days-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .stats-column {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .stat-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-label {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        @media (max-width: 600px) {
+            .attendance-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .main-card {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Student Dashboard</h1>
+            <button class="logout-btn" onclick="handleLogout()" >Logout</button>
+        </div>
+
+        <div class="main-card">
+            <h2 class="card-title">Attendance Summary</h2>
+            
+            <div class="month-selector">
+                <div class="month-dropdown">
+                    <div class="calendar-icon"></div>
+                    <select class="month-select" id="monthSelect" onchange="updateAttendance()">
+                        <option value="2025-05">May 2025</option>
+                        <option value="2025-04">April 2025</option>
+                        <option value="2025-03">March 2025</option>
+                        <option value="2025-02">February 2025</option>
+                        <option value="2025-01">January 2025</option>
+                        <option value="2024-12">December 2024</option>
+                        <option value="2024-11">November 2024</option>
+                        <option value="2024-10">October 2024</option>
+                        <option value="2024-09">September 2024</option>
+                    </select>
+                </div>
+                <span class="select-month-text">Select Month</span>
+            </div>
+            
+            <div class="last-updated">Last Updated: <span id="lastUpdated">May 31, 2025</span></div>
+
+            <div class="attendance-section">
+                <h3 class="section-title">Hostel Attendance</h3>
+                
+                <div class="attendance-grid">
+                    <div class="total-days-card">
+                        <div class="total-days-label">Total Days</div>
+                        <div class="total-days-number" id="totalDays">31</div>
+                    </div>
+                    
+                    <div class="stats-column">
+                        <div class="stat-item">
+                            <span class="stat-label">Present</span>
+                            <span class="stat-number" id="presentDays">23</span>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <span class="stat-label">Absent</span>
+                            <span class="stat-number" id="absentDays">01</span>
+                        </div>
+                        
+                        <div class="stat-item">
+                            <span class="stat-label">On Leave</span>
+                            <span class="stat-number" id="leaveDays">07</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('Logging out...');
+                // add the java script required, this would redirect to login page
+            }
+        }
+
+        const attendanceData = {
+            '2025-05': { total: 31, present: 23, absent: 1, leave: 7, updated: 'May 31, 2025' },
+            '2025-04': { total: 30, present: 28, absent: 0, leave: 2, updated: 'April 30, 2025' },
+            '2025-03': { total: 31, present: 25, absent: 2, leave: 4, updated: 'March 31, 2025' },
+            '2025-02': { total: 28, present: 26, absent: 1, leave: 1, updated: 'February 28, 2025' },
+            '2025-01': { total: 31, present: 29, absent: 0, leave: 2, updated: 'January 31, 2025' },
+            '2024-12': { total: 31, present: 27, absent: 1, leave: 3, updated: 'December 31, 2024' },
+            '2024-11': { total: 30, present: 24, absent: 3, leave: 3, updated: 'November 30, 2024' },
+            '2024-10': { total: 31, present: 30, absent: 0, leave: 1, updated: 'October 31, 2024' },
+            '2024-09': { total: 30, present: 22, absent: 2, leave: 6, updated: 'September 30, 2024' }
+        };
+
+        function updateAttendance() {
+            const selectedMonth = document.getElementById('monthSelect').value;
+            const data = attendanceData[selectedMonth];
+            
+            if (data) {
+                document.getElementById('totalDays').textContent = data.total;
+                document.getElementById('presentDays').textContent = data.present.toString().padStart(2, '0');
+                document.getElementById('absentDays').textContent = data.absent.toString().padStart(2, '0');
+                document.getElementById('leaveDays').textContent = data.leave.toString().padStart(2, '0');
+                document.getElementById('lastUpdated').textContent = data.updated;
+            }
+        }
+
+        // Initialize with default data
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAttendance();
+        });
+    </script>
+</body>
+</html>
