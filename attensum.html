@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Hostel Attendance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: normal;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome-text h2 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+
+        .hostel-title {
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .attendance-summary-btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .attendance-summary-btn:hover {
+            background: #5856eb;
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .search-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+            font-weight: normal;
+        }
+
+        .form-group input, .form-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            min-width: 120px;
+        }
+
+        .search-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            height: fit-content;
+        }
+
+        .search-btn:hover {
+            background: #16a34a;
+        }
+
+        .table-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        .data-table th:not(:last-child) {
+            border-right: 1px solid #ddd;
+        }
+
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            border-right: 1px solid #eee;
+            color: #666;
+            font-size: 14px;
+            min-height: 50px;
+        }
+
+        .data-table td:last-child {
+            border-right: none;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tbody tr {
+            height: 60px;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .attendance-header {
+            text-align: center;
+            position: relative;
+        }
+
+        .attendance-subheader {
+            font-size: 11px;
+            color: #666;
+            font-weight: normal;
+            margin-top: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .search-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .welcome-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            .data-table {
+                min-width: 600px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Warden Dashboard</h1>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="main-content">
+            <div class="welcome-section">
+                <div class="welcome-text">
+                    <h2>Welcome <span id="wardenName">Warden</span>!</h2>
+
+                    <div class="hostel-name" id="wardenHostel">Hostel Name</div>
+
+                </div>
+            </div>
+
+            <div class="section-title">Student Attendance Record</div>
+
+            <div class="search-section">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="hostel-id">Hostel ID:</label>
+                    <input type="text" id="hostel-id" name="hostel-id">
+                </div>
+                <div class="form-group">
+                    <label for="attendance">Attendance:</label>
+                    <select id="attendance" name="attendance">
+                        <option value="">All Users</option>
+                        <option value="present">Present</option>
+                        <option value="absent">Absent</option>
+                        <option value="leave">Leave</option>
+                    </select>
+                </div>
+                <button class="search-btn">Search</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Hostel ID</th>
+                            <th>Name</th>
+                            <th>Roll No.</th>
+                            <th>Room No.</th>
+                            <th class="attendance-header">
+                                Hostel Attendance
+                                <div class="attendance-subheader">Present | Absent | Leave</div>
+                            </th>
+                            <th class="attendance-header">
+                                Mess Attendance
+                                <div class="attendance-subheader">Present | Absent | Leave</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('Logging out...');
+                // In a real application, this would redirect to login page
+            }
+        }
+
+        // Add basic interactivity
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            const name = document.getElementById('name').value;
+            const hostelId = document.getElementById('hostel-id').value;
+            const attendance = document.getElementById('attendance').value;
+            
+            if (name || hostelId || attendance) {
+                alert('Search functionality would be implemented here.\nFilters: Name=' + name + ', Hostel ID=' + hostelId + ', Attendance=' + attendance);
+            } else {
+                alert('Please enter search criteria');
+            }
+        });
+
+        document.querySelector('.attendance-summary-btn').addEventListener('click', function() {
+            alert('Attendance Summary page would open here');
+        });
+
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('Logout functionality would be implemented here');
+            }
+        });
+        // add fuctions from index.html for dynamic warden name and hostelk name
+        if (role === 'warden' && currentUser) {
+            const nameEl = document.getElementById('wardenName');
+            if (nameEl) nameEl.textContent = currentUser.name;
+    
+            const hostelEl = document.getElementById('wardenHostel');
+            if (hostelEl) hostelEl.textContent = 'VLB Hostel'; // Replace for dynamic names
+        }
+
+        // backend people are expected to add remaining functions
+
+    </script>
+</body>
+</html>
