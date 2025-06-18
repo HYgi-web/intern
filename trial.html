@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
+    <title>Hostel Management System</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #4923f1 0%, #2196f3 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow-light: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,103 +24,67 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary-gradient);
             min-height: 100vh;
             padding: 20px;
+            position: relative;
             overflow-x: hidden;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .floating-elements {
+        /* Animated background particles */
+        body::before {
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 1;
+            background: radial-gradient(circle at 20% 80%, rgba(76, 73, 244, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(28, 140, 165, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(101, 56, 150, 0.3) 0%, transparent 50%);
+            animation: floatingBackground 20s ease-in-out infinite;
+            z-index: -1;
         }
 
-        .floating-circle {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            animation: float 20s infinite linear;
+        @keyframes floatingBackground {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(120deg); }
+            66% { transform: translateY(30px) rotate(240deg); }
         }
 
-        .floating-circle:nth-child(1) {
-            width: 60px;
-            height: 60px;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .floating-circle:nth-child(2) {
-            width: 40px;
-            height: 40px;
-            top: 60%;
-            right: 15%;
-            animation-delay: -5s;
-        }
-
-        .floating-circle:nth-child(3) {
-            width: 80px;
-            height: 80px;
-            bottom: 30%;
-            left: 20%;
-            animation-delay: -10s;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
-            33% { transform: translateY(-30px) rotate(120deg); opacity: 0.6; }
-            66% { transform: translateY(20px) rotate(240deg); opacity: 0.4; }
-            100% { transform: translateY(0px) rotate(360deg); opacity: 0.3; }
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+        /* Enhanced Login Page Styles */
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            box-shadow: var(--shadow-heavy);
+            padding: 50px;
+            max-width: 450px;
+            margin: 10vh auto;
+            text-align: center;
             position: relative;
-            z-index: 2;
+            overflow: hidden;
+            animation: slideInUp 0.8s ease-out;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            margin-bottom: 40px;
-            padding: 20px 0;
-            animation: slideDown 0.8s ease-out;
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            animation: rotate 10s linear infinite;
+            z-index: -1;
         }
 
-        @keyframes slideDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            margin-bottom: 30px;
-            animation: slideInDown 1s ease-out;
-        }
-
-        @keyframes slideInDown {
+        @keyframes slideInUp {
             from {
                 opacity: 0;
-                transform: translateY(-50px);
+                transform: translateY(50px);
             }
             to {
                 opacity: 1;
@@ -118,14 +92,179 @@
             }
         }
 
-        .header h1 {
-            font-size: 28px;
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .login-title {
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
             font-weight: 700;
-            background: linear-gradient(45deg, #fff, #f0f8ff);
+            background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .role-selector {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 35px;
+            gap: 15px;
+            position: relative;
+        }
+
+        .role-btn {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid transparent;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .role-btn:hover::before {
+            left: 100%;
+        }
+
+        .role-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-light);
+        }
+
+        .role-btn:hover:not(.active) {
+            transform: translateY(-2px) scale(1.02);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: var(--transition-smooth);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-group input:focus + label {
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
+        }
+
+        .login-btn:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+        .dashboard {
+            display: none;
+          }
+          .dashboard.active {
+            display: block;
+          }
+          
+
+        /* Dashboard Styles */
+        
+        .scontainer {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
         }
 
         .logout-btn {
@@ -164,510 +303,1211 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 30px;
+        }
 
+        .left-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
 
-        .dashboard-card {
+        .profile-card, .announcements-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
             border-radius: 25px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: slideUp 0.8s ease-out 0.2s both;
+            padding: 35px;
+            box-shadow: var(--shadow-heavy);
+            transition: var(--transition-smooth);
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .profile-card:hover, .announcements-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-card h2, .announcements-card h2 {
+            font-size: 26px;
+            margin-bottom: 30px;
+            color: #333;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .profile-content {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 4px solid rgba(102, 126, 234, 0.3);
             position: relative;
             overflow: hidden;
+            transition: var(--transition-smooth);
         }
 
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .profile-picture::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(102, 126, 234, 0.3), transparent);
+            animation: rotate 8s linear infinite;
+            z-index: -1;
         }
 
-        .dashboard-card::before {
+        .profile-picture:hover {
+            transform: scale(1.1) rotate(5deg);
+            border-color: rgba(102, 126, 234, 0.6);
+        }
+
+        .profile-picture img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            transition: var(--transition-smooth);
+        }
+
+        .profile-picture:hover img {
+            transform: scale(1.1);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info div {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #333;
+            line-height: 1.6;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        .profile-info div:hover {
+            color: #667eea;
+            transform: translateX(10px);
+        }
+
+        .profile-info strong {
+            color: #4a5568;
+            font-weight: 700;
+        }
+
+        .announcement-item {
+            height: 80px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .announcement-item::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            animation: shimmer 3s infinite;
         }
 
-        .dashboard-card:hover::before {
-            left: 100%;
+        .announcement-item:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
         }
 
-        .card-title {
-            font-size: 28px;
-            font-weight: 700;
-            color: #2d3436;
-            margin-bottom: 30px;
+        .announcement-item:hover::before {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .announcement-item p {
+            padding: 20px;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+        }
+
+        .right-section {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .menu-button {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 25px;
+            border-radius: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            box-shadow: var(--shadow-light);
+            text-decoration: none;
+            display: block;
             text-align: center;
             position: relative;
+            overflow: hidden;
         }
 
-        .card-title::after {
+        .menu-button::before {
             content: '';
             position: absolute;
-            bottom: -10px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 2px;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: all 0.6s ease;
+            transform: translate(-50%, -50%);
         }
 
-        .fee-item {
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 25px;
+        .menu-button:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .menu-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.4);
+            background: var(--secondary-gradient);
+        }
+
+        .menu-button:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+
+        /*Warden Dashboard*/
+        .wcontainer {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
             color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .welcome-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .welcome-text h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .hostel-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .attendance-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102,126,234,0.3);
+        }
+
+        .attendance-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+        }
+
+        .attendance-btn a{
+            text-decoration: none;
+        }
+        .room-chart-section {
+            margin-bottom: 40px;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .legend {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .occupied { background-color: #667eea; }
+        .not-occupied { background-color: #e74c3c; }
+
+        .room-chart {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .block-header {
+            background: #f8f9fa;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 100px 1fr 1fr;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .floor-row {
+            display: grid;
+            grid-template-columns: 100px 1fr 1fr;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f1f3f4;
+        }
+
+        .floor-row:last-child {
+            border-bottom: none;
+        }
+
+        .floor-label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 3px;
+            padding: 0 10px;
+        }
+
+        .room {
+            width: 25px;
+            height: 25px;
+            border-radius: 6px;
+            transition: var(--transition-bounce);
+            cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: all 0.4s ease;
-            cursor: pointer;
-            animation: fadeIn 0.6s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .fee-item:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .fee-item::before {
+        .room::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            pointer-events: none;
-        }
-
-        .fee-item::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transform: translateY(-50%);
-            transition: left 0.6s;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .fee-item:hover::after {
-            left: 100%;
+        .room:hover {
+            transform: scale(1.2) rotate(5deg);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 10;
         }
 
-        .fee-details {
-            flex: 1;
-            z-index: 2;
+        .room:hover::before {
+            opacity: 1;
         }
 
-        .fee-type {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .fee-amount {
-            font-size: 20px;
-            font-weight: 600;
-            opacity: 0.95;
-            margin-bottom: 5px;
-        }
-
-        .fee-status {
-            font-size: 14px;
-            opacity: 0.8;
-            font-weight: 500;
-            letter-spacing: 1px;
-        }
-
-        .fee-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            z-index: 2;
-        }
-
-        .pay-btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            min-width: 100px;
-        }
-
-        .paid-btn {
-            background: linear-gradient(135deg, #00b894, #00a085);
-            color: white;
-            box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
-        }
-
-        .pay-now-btn {
-            background: linear-gradient(135deg, #fdcb6e, #e17055);
-            color: white;
-            box-shadow: 0 4px 15px rgba(253, 203, 110, 0.4);
+        .room.occupied {
+            background: var(--primary-gradient);
             animation: pulse 2s infinite;
         }
 
+        .room.not-occupied {
+            background: var(--secondary-gradient);
+            animation: pulse 2s infinite 1s;
+        }
+
         @keyframes pulse {
-            0% { box-shadow: 0 4px 15px rgba(253, 203, 110, 0.4); }
-            50% { box-shadow: 0 8px 25px rgba(253, 203, 110, 0.6); }
-            100% { box-shadow: 0 4px 15px rgba(253, 203, 110, 0.4); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
-        .pay-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
 
-        .print-btn {
-            background: linear-gradient(135deg, #74b9ff, #0984e3);
+        .room.labeled {
             color: white;
-            box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
-        }
-
-        .dropdown-arrow {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            width: 40px;
-            height: 40px;
+            font-size: 8px;
+            font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .dropdown-arrow:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(180deg);
+        .leave-applications {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
         }
 
-        .hostel-fees {
-            background: linear-gradient(135deg, #6c5ce7, #5f3dc4, #4834d4);
-            animation-delay: 0.3s;
+        .leave-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
         }
 
-        .mess-fees {
-            background: linear-gradient(135deg, #a29bfe, #74b9ff, #0984e3);
-            animation-delay: 0.5s;
-        }
-
-        .fee-details-expanded {
-            display: none;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            animation: expandDetails 0.3s ease-out;
-        }
-
-        @keyframes expandDetails {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fee-breakdown {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .breakdown-item {
-            background: rgba(255, 255, 255, 0.1);
+        .leave-item {
+            background: white;
             padding: 15px;
             border-radius: 10px;
-            text-align: center;
-        }
-
-        .breakdown-label {
-            font-size: 12px;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-
-        .breakdown-value {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            color: #333;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .receipt-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .receipt-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .receipt-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #eee;
-        }
-
-        .receipt-header h2 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .receipt-details {
-            margin-bottom: 30px;
-        }
-
-        .receipt-row {
+            margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .receipt-row:last-child {
-            border-bottom: none;
-            font-weight: 600;
-            font-size: 18px;
-            color: #2d3436;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #999;
-        }
-
-        .print-receipt-btn {
-            background: linear-gradient(135deg, #6c5ce7, #5f3dc4);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             transition: all 0.3s ease;
         }
 
-        .print-receipt-btn:hover {
+        .leave-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .leave-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .leave-placeholder {
+            height: 20px;
+            background: linear-gradient(90deg, #e9ecef 25%, #f8f9fa 50%, #e9ecef 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 4px;
+            flex-grow: 1;
+            margin-right: 15px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .view-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.3);
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 0 10px;
+                margin: 10px;
+                border-radius: 10px;
             }
             
-            .dashboard-card {
-                padding: 25px;
+            .content {
+                padding: 20px;
             }
             
-            .fee-item {
+            .welcome-section {
                 flex-direction: column;
-                text-align: center;
                 gap: 20px;
-                padding: 25px;
             }
             
-            .fee-actions {
-                justify-content: center;
-                width: 100%;
+            .room-grid {
+                grid-template-columns: repeat(5, 1fr);
             }
-
-            .header h1 {
-                font-size: 24px;
+            
+            .block-header,
+            .floor-row {
+                grid-template-columns: 80px 1fr;
             }
-
-            .user-info {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
-
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            .receipt-content, .receipt-content * {
-                visibility: visible;
-            }
-            .receipt-content {
-                position: absolute;
-                left: 0;
-                top: 0;
-                transform: none;
-                box-shadow: none;
-                max-width: none;
-                width: 100%;
-            }
-            .close-btn, .print-receipt-btn {
+            
+            .floor-row .room-grid:last-child {
                 display: none;
             }
         }
     </style>
 </head>
 <body>
-    <div class="floating-elements">
-        <div class="floating-circle"></div>
-        <div class="floating-circle"></div>
-        <div class="floating-circle"></div>
-    </div>
-
     <div class="container">
-        <div class="header">
-            <h1>Student Dashboard</h1>
-            <button class="logout-btn" onclick="handleLogout()">Logout</button>
+        <!-- Login Page -->
+        <div id="loginPage" class="login-container">
+            <h1 class="login-title">Hostel Management System</h1>
+            
+            <div class="role-selector">
+                <button class="role-btn active" data-role="student">Student</button>
+                <button class="role-btn" data-role="warden">Warden</button>
+                <button class="role-btn" data-role="authority">Authority</button>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+        </div>
+
+        <!-- Student Dashboard -->
+        <div id="studentDashboard" class="dashboard">
+            <div class="scontainer">
+                <div class="header">
+                    <h1>Student Dashboard</h1>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+        
+                <div class="dashboard-content">
+                    <div class="left-section">
+                        <div class="profile-card">
+                            <h2>Your Profile</h2>
+                            <div class="profile-content">
+                                <div class="profile-picture">
+                                    <img src="images/images.jpg">
+                                </div>
+                                <div class="profile-info">
+                                    <div><strong>Name:</strong> <span id="studentName">Harsh Yadav</span></div>
+                                    <div><strong>Room No.:</strong> <span id="roomNo">12/4</span></div>
+                                    <div><strong>Hostel Name:</strong> <span id="hostelName">Type-2 Hostel</span></div>
+                                    <div><strong>Roommates:</strong> <span id="roommates">Shriyansh Sharma, Rachit Vij</span></div>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="announcements-card">
+                            <h2>Announcements</h2>
+                            <div class="announcement-item">
+                                <p>Clear your fee dues</p>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="right-section">
+                        <a href="fee.html" class="menu-button" onclick="handleFeePayment()">Fee Payment</a>
+                        <a href="attend.html" class="menu-button" onclick="handleAttendance()">Attendance Summary</a>
+                        <a href="mess.html" class="menu-button" onclick="handleHostelMess()">Hostel Mess</a>
+                        <a href="leave.html" class="menu-button" onclick="handleLeaveApplication()">Apply for Leave</a>
+                    </div>
+                </div>
+            </div>
         </div>
         
 
-        <div class="dashboard-card">
-            <h2 class="card-title">Fee Payment Portal</h2>
-            
-            <div class="fee-item hostel-fees" data-fee-type="hostel">
-                <div class="fee-details">
-                    <div class="fee-type">Hostel Fees</div>
-                    <div class="fee-amount">₹72,000/-</div>
-                    <div class="fee-status">PAID BALANCE</div>
-                    
+        <!-- Warden Dashboard -->
+        <div class="wcontainer dashboard" id="wardenDashboard">
+      
+            <div class="header">
+                <h1>Warden Dashboard</h1>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        
+        <div class="content">
+            <div class="welcome-section">
+                <div class="welcome-text">
+                    <h2>Welcome <span id="wardenName">Warden</span>!</h2>
+
+                    <div class="hostel-name" id="wardenHostel">Hostel Name</div>
+
                 </div>
-                <div class="fee-actions">
-                    <button class="pay-btn paid-btn">Paid</button>
-                    <button class="pay-btn print-btn" onclick="showReceipt('hostel')">Print Receipt</button>
-                    <button class="dropdown-arrow" onclick="toggleDetails(this)">▼</button>
+                <a href="attensum.html" class="attendance-btn">Attendance<br>Summary</a>
+            </div>
+
+            <div class="room-chart-section">
+                <div class="chart-header">
+                    <div class="chart-title">Room Occupancy Chart</div>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color occupied"></div>
+                            <span>Occupied</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color not-occupied"></div>
+                            <span>Not Occupied</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="room-chart">
+                    <div class="block-header">
+                        <div></div>
+                        <div>Block A</div>
+                        <div>Block B</div>
+                    </div>
+                    
+                    <div class="floor-row">
+                        <div class="floor-label">Floor 1</div>
+                        <div class="room-grid">
+                            <div class="room occupied labeled">101</div>
+                            <div class="room occupied labeled">102</div>
+                            <div class="room occupied labeled">103</div>
+                            <div class="room occupied labeled">104</div>
+                            <div class="room occupied labeled">105</div>
+                            <div class="room occupied labeled">106</div>
+                            <div class="room occupied labeled">107</div>
+                            <div class="room occupied labeled">108</div>
+                            <div class="room occupied labeled">109</div>
+                            <div class="room occupied labeled">110</div>
+                        </div>
+                        <div class="room-grid">
+                            <div class="room occupied labeled">111</div>
+                            <div class="room occupied labeled">112</div>
+                            <div class="room occupied labeled">113</div>
+                            <div class="room occupied labeled">114</div>
+                            <div class="room occupied labeled">115</div>
+                            <div class="room occupied labeled">116</div>
+                            <div class="room occupied labeled">117</div>
+                            <div class="room occupied labeled">118</div>
+                            <div class="room occupied labeled">119</div>
+                            <div class="room occupied labeled">120</div>
+                        </div>
+                    </div>
+                    
+                    <div class="floor-row">
+                        <div class="floor-label">Floor 2</div>
+                        <div class="room-grid">
+                            <div class="room occupied labeled">201</div>
+                            <div class="room occupied labeled">202</div>
+                            <div class="room occupied labeled">203</div>
+                            <div class="room occupied labeled">204</div>
+                            <div class="room occupied labeled">205</div>
+                            <div class="room occupied labeled">206</div>
+                            <div class="room occupied labeled">207</div>
+                            <div class="room not-occupied labeled">208</div>
+                            <div class="room occupied labeled">209</div>
+                            <div class="room occupied labeled">210</div>
+                        </div>
+                        <div class="room-grid">
+                            <div class="room occupied labeled">211</div>
+                            <div class="room occupied labeled">212</div>
+                            <div class="room occupied labeled">213</div>
+                            <div class="room occupied labeled">214</div>
+                            <div class="room occupied labeled">215</div>
+                            <div class="room occupied labeled">216</div>
+                            <div class="room occupied labeled">217</div>
+                            <div class="room occupied labeled">218</div>
+                            <div class="room occupied labeled">219</div>
+                            <div class="room occupied labeled">220</div>
+                        </div>
+                    </div>
+                    
+                    <div class="floor-row">
+                        <div class="floor-label">Floor 3</div>
+                        <div class="room-grid">
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                        </div>
+                        <div class="room-grid">
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="floor-row">
+                        <div class="floor-label">Floor 4</div>
+                        <div class="room-grid">
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room not-occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                        </div>
+                        <div class="room-grid">
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="floor-row">
+                        <div class="floor-label">Floor 5</div>
+                        <div class="room-grid">
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                        </div>
+                        <div class="room-grid">
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="floor-row">
+                        <div class="floor-label">Floor 6</div>
+                        <div class="room-grid">
+                            <div class="room not-occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room not-occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room not-occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                        </div>
+                        <div class="room-grid">
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                            <div class="room occupied"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="fee-item mess-fees" data-fee-type="mess">
-                <div class="fee-details">
-                    <div class="fee-type">Mess Fees</div>
-                    <div class="fee-amount">₹34,800/-</div>
-                    <div class="fee-status">PENDING PAYMENT</div>
-                    
+            <div class="leave-applications">
+                <div class="leave-title">Leave Applications</div>
+                <div class="leave-item">
+                    <div class="leave-placeholder">
+                        <p>Sonam Kapoor (Room No. 120)</p>
+                    </div>
+                    <button class="view-btn">View</button>
                 </div>
-                <div class="fee-actions">
-                    <button class="pay-btn pay-now-btn" onclick="processPayment('mess')">Pay Now</button>
-                    <button class="pay-btn print-btn" onclick="showReceipt('mess')" style="opacity: 0.5; pointer-events: none;">Print Receipt</button>
-                    <button class="dropdown-arrow" onclick="toggleDetails(this)">▼</button>
+                <div class="leave-item">
+                    <div class="leave-placeholder">
+                        Alia Bhatt (Room No. 110)
+                    </div>
+                    <button class="view-btn">View</button>
+                </div>
+                <div class="leave-item">
+                    <div class="leave-placeholder">
+                        Anuska Sen (Room No. 201)
+                    </div>
+                    <button class="view-btn">View</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="notification" id="notification">
-        <div id="notificationText"></div>
+
+        <!-- Authority Dashboard -->
+        <div id="authorityDashboard" class="dashboard">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Authority Dashboard</h1>
+                <div class="user-info">
+                    <span id="authorityName">Dr. Sanjay Patidar</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+            
+            <div class="dashboard-content">
+                <div class="hostel-selector">
+                    <label for="hostelSelect">Select Hostel: </label>
+                    <select id="hostelSelect" onchange="updateAuthorityView()">
+                        <option value="all">All Hostels</option>
+                        <option value="hostel-a">Hostel T-2</option>
+                        <option value="hostel-b">Hostel T-2BH</option>
+                        <option value="hostel-c">Hostel CVRVR<option>
+                    </select>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Overall Statistics -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Overall Statistics</h3>
+                            <div class="card-icon icon-stats">📊</div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number">135</div>
+                                <div class="stat-label">Total Rooms</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">118</div>
+                                <div class="stat-label">Occupied</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">28</div>
+                                <div class="stat-label">Total Queries</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">87%</div>
+                                <div class="stat-label">Avg Occupancy</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hostel Overview -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Hostel Overview</h3>
+                            <div class="card-icon icon-rooms">🏢</div>
+                        </div>
+                        <div id="hostelOverview">
+                            <div class="room-item">
+                                <div><strong>Hostel T-2</strong> - Warden: Mr. Krishna Dutt</div>
+                                <span class="room-status room-occupied">45/50 Occupied</span>
+                            </div>
+                            <div class="room-item">
+                                <div><strong>Hostel ABH</strong> - Warden: Dr. Sanjay Kumar</div>
+                                <span class="room-status room-occupied">38/45 Occupied</span>
+                            </div>
+                            <div class="room-item">
+                                <div><strong>Hostel CVR</strong> - Warden: Dr. Raghvendra Gautam</div>
+                                <span class="room-status room-occupied">35/40 Occupied</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activities -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Recent Activities</h3>
+                            <div class="card-icon icon-announcement">📋</div>
+                        </div>
+                        <div id="recentActivities">
+                            <div class="announcement-item">
+                                <div class="announcement-date">June 11, 2025</div>
+                                <div>New query raised in Hostel T-2 - Room 205 (Bathroom repair)</div>
+                            </div>
+                            <div class="announcement-item">
+                                <div class="announcement-date">June 10, 2025</div>
+                                <div>Query resolved in Hostel ABH - Room 304 (WiFi issue)</div>
+                            </div>
+                            <div class="announcement-item">
+                                <div class="announcement-date">June 10, 2025</div>
+                                <div>New student admission - Hostel CVR Room 205</div>
+                            </div>
+                            <div class="announcement-item">
+                                <div class="announcement-date">June 9, 2025</div>
+                                <div>Maintenance completed in Hostel T-2 - AC repairs</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fee Collection Status -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Fee Collection Status</h3>
+                            <div class="card-icon icon-fees">💳</div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number">₹18.5L</div>
+                                <div class="stat-label">Collected</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">₹2.3L</div>
+                                <div class="stat-label">Pending</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">89%</div>
+                                <div class="stat-label">Collection Rate</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">12</div>
+                                <div class="stat-label">Overdue</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-   
     <script>
-        // add functionality for print receipt with dynamic interactions
-       
-
-        //logout functioning
-        function handleLogout() {
-            if (confirm('Are you sure you want to logout?')) {
-                alert('Logging out...');
-                // add the java script required, this would redirect to login page
+        let currentRole = 'student';
+        let currentUser = null;
+        
+        // Updated user data with student details
+        const usersData = {
+            student: {
+                username: 'student',
+                password: 'student123',
+                name: 'Harsh Yadav',
+                roomNo: '12/4',
+                hostel: 'Type-2 Hostel',
+                roommates: ['Shriyansh Sharma', 'Rachit Vij']
+            },
+            warden: {
+                username: 'warden',
+                password: 'warden123',
+                name: 'Dr. ABC'
+            },
+            authority: {
+                username: 'authority',
+                password: 'authority123',
+                name: 'Dr. Sanjay'
             }
-        }
-
-        //messages (can be changed by backend team as per requirement)
-        function processPayment(feeType) {
-            if (paymentStatus[feeType].paid) {
-                showNotification('Payment already completed!', 'info');
-                return;
-            }
-
-            // Show payment gateway redirect message (frontend only)
-            showNotification('Redirecting to payment gateway...', 'info');
-            
-            setTimeout(() => {
-                showNotification('This is a demo interface. Backend integration required for actual payments.', 'info');
-            }, 2000);
-        }
-        //arrorw movement
-        function toggleDetails(arrow) {
-            const feeItem = arrow.closest('.fee-item');
-            const details = feeItem.querySelector('.fee-details-expanded');
-            
-            if (details.style.display === 'none' || details.style.display === '') {
-                details.style.display = 'block';
-                arrow.style.transform = 'rotate(180deg)';
+        };
+        
+        // Role selection
+        document.querySelectorAll('.role-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentRole = this.dataset.role;
+            });
+        });
+        
+        // Login submission
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+        
+            if (
+                usersData[currentRole] &&
+                usersData[currentRole].username === username &&
+                usersData[currentRole].password === password
+            ) {
+                currentUser = usersData[currentRole];
+                showDashboard(currentRole);
             } else {
-                details.style.display = 'none';
-                arrow.style.transform = 'rotate(0deg)';
+                alert('Invalid credentials. Please try again.');
+            }
+        });
+        
+        function showDashboard(role) {
+            document.getElementById('loginPage').style.display = 'none';
+        
+            // Hide all dashboards
+            document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
+        
+            // Show relevant dashboard
+            const dashboard = document.getElementById(role + 'Dashboard');
+            if (dashboard) dashboard.classList.add('active');
+        
+            // Populate student profile data
+            if (role === 'student' && currentUser) {
+                document.getElementById('studentName').textContent = currentUser.name;
+                document.getElementById('roomNo').textContent = currentUser.roomNo || '';
+                document.getElementById('hostelName').textContent = currentUser.hostel || '';
+                document.getElementById('roommates').textContent = (currentUser.roommates || []).join(', ');
+            }
+        
+            if (role === 'student') setTimeout(addPaymentButtons, 100);
+            if (role === 'warden') setTimeout(addRoomManagementFeatures, 100);
+        }
+        
+        function logout() {
+            currentUser = null;
+            document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
+            document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('loginForm').reset();
+        }
+        
+        // Helper functions
+        function addPaymentButtons() {
+            if (currentRole === 'student') {
+                const feeItems = document.querySelectorAll('.fee-item');
+                feeItems.forEach(item => {
+                    if (!item.querySelector('.pay-btn')) {
+                        const payBtn = document.createElement('button');
+                        payBtn.textContent = 'Pay Now';
+                        payBtn.className = 'pay-btn';
+                        payBtn.style.cssText =
+                            'margin-top: 10px; padding: 8px 16px; background: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer;';
+                        payBtn.onclick = () => payFee(item.querySelector('div:nth-child(2)').textContent);
+                        item.appendChild(payBtn);
+                    }
+                });
             }
         }
-
+        
+        function payFee(feeType) {
+            const confirmed = confirm(`Proceed to pay ${feeType}?`);
+            if (confirmed) {
+                showNotification(`${feeType} payment successful!`, 'success');
+                setTimeout(() => location.reload(), 1500);
+            }
+        }
+        
+        function addRoomManagementFeatures() {
+            if (currentRole === 'warden') {
+                const roomItems = document.querySelectorAll('.room-item');
+                roomItems.forEach(item => {
+                    if (!item.querySelector('.manage-btn')) {
+                        const manageBtn = document.createElement('button');
+                        manageBtn.textContent = 'Manage';
+                        manageBtn.className = 'manage-btn';
+                        manageBtn.style.cssText =
+                            'margin-left: 10px; padding: 4px 8px; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem;';
+                        const roomText = item.querySelector('div').textContent;
+                        const roomNumber = roomText.match(/Room (\d+)/)[1];
+                        manageBtn.onclick = () => scheduleMaintenanceForRoom(roomNumber);
+                        item.querySelector('div').appendChild(manageBtn);
+                    }
+                });
+            }
+        }
+        
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
+                color: white;
+                border-radius: 5px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+        
+        const style = document.createElement('style');
+        style.textContent = `@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }`;
+        document.head.appendChild(style);
+        
+        // Event triggers
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginContainer = document.querySelector('.login-container');
+            const demoInfo = document.createElement('div');
+            demoInfo.style.cssText =
+                'margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; font-size: 0.9rem; color: #666;';
+            demoInfo.innerHTML = `
+                <strong>Demo Credentials:</strong><br>
+                Student: student / student123<br>
+                Warden: warden / warden123<br>
+                Authority: authority / authority123
+            `;
+            loginContainer.appendChild(demoInfo);
+        });
+        
+        setInterval(() => {
+            if (currentUser) console.log('Auto-refreshing dashboard data...');
+        }, 30000);
+        
        
+       
+      //dashboard opening fix
+        document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
+        const dashboard = document.getElementById(role + 'Dashboard');
+            if (dashboard) dashboard.classList.add('active');
+
+
+            //warden dashboard
+            function showDashboard(role) {
+                document.getElementById('loginPage').style.display = 'none';
+            
+                // Hide all dashboards
+                document.querySelectorAll('.dashboard').forEach(d => d.classList.remove('active'));
+            
+                // Show relevant dashboard
+                const dashboard = document.getElementById(role + 'Dashboard');
+                if (dashboard) dashboard.classList.add('active');
+            
+                if (role === 'student' && currentUser) {
+                    document.getElementById('studentName').textContent = currentUser.name;
+                    document.getElementById('roomNo').textContent = currentUser.roomNo || '';
+                    document.getElementById('hostelName').textContent = currentUser.hostel || '';
+                    document.getElementById('roommates').textContent = (currentUser.roommates || []).join(', ');
+                }
+            
+                if (role === 'warden' && currentUser) {
+                    const nameEl = document.getElementById('wardenName');
+                    if (nameEl) nameEl.textContent = currentUser.name;
+            
+                    const hostelEl = document.getElementById('wardenHostel');
+                    if (hostelEl) hostelEl.textContent = 'VLB Hostel'; // Replace for dynamic names
+                }
+            
+                if (role === 'student') setTimeout(addPaymentButtons, 100);
+                if (role === 'warden') setTimeout(addRoomManagementFeatures, 100);
+            }
+            
+            
+
     </script>
-</body>
-</html>
