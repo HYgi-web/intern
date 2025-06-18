@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Student Dashboard</title>
+    <title>Student Leave Application Form</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
@@ -78,7 +76,7 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 1000px;
             margin: 0 auto;
             position: relative;
             z-index: 2;
@@ -150,33 +148,17 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .main-card {
+        .form-container {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
-            border-radius: 24px;
+            border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             animation: slideInUp 1s ease-out 0.3s both;
             position: relative;
-            overflow: hidden;
-        }
-
-        .main-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-            background-size: 200% 100%;
-            animation: shimmer 3s linear infinite;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
         }
 
         @keyframes slideInUp {
@@ -190,370 +172,294 @@
             }
         }
 
-        .card-title {
-            font-size: 32px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 30px;
-            animation: pulse 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulse {
-            from { opacity: 0.8; }
-            to { opacity: 1; }
-        }
-
-        .month-selector {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
-            animation: fadeIn 1s ease-out 0.6s both;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .month-dropdown {
-            position: relative;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border: 2px solid transparent;
-            border-radius: 16px;
-            padding: 12px 16px;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background-clip: padding-box;
-        }
-
-        .month-dropdown:hover {
-            background: linear-gradient(135deg, #e9ecef, #dee2e6);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .calendar-icon {
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 4px;
-            position: relative;
-            animation: bounce 2s infinite;
-        }
-
-        .calendar-icon::before {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 4px;
-            background: white;
-            border-radius: 1px;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-3px); }
-            60% { transform: translateY(-2px); }
-        }
-
-        .month-select {
-            background: none;
-            border: none;
-            font-weight: 600;
-            color: #333;
-            cursor: pointer;
-            outline: none;
-            font-size: 16px;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .select-month-text {
-            color: #6c757d;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .last-updated {
-            color: #6c757d;
-            font-size: 13px;
-            margin-bottom: 35px;
-            animation: fadeIn 1s ease-out 0.9s both;
-            font-weight: 500;
-        }
-
-        .attendance-section {
-            background: linear-gradient(135deg, rgba(248, 249, 250, 0.8), rgba(233, 236, 239, 0.8));
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid rgba(233, 236, 239, 0.3);
-            animation: slideInUp 1s ease-out 1.2s both;
-        }
-
-        .section-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 25px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 2px;
-            animation: expandLine 1s ease-out 1.5s both;
-        }
-
-        @keyframes expandLine {
-            to { width: 100%; }
-        }
-
-        .attendance-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            align-items: center;
-        }
-
-        .total-days-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 249, 250, 0.9));
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            border: 1px solid rgba(233, 236, 239, 0.3);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            animation: scaleIn 1s ease-out 1.8s both;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .total-days-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .total-days-card:hover::before {
-            opacity: 1;
-        }
-
-        .total-days-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .total-days-label {
-            color: #6c757d;
-            font-size: 16px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .total-days-number {
-            font-size: 56px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: countUp 2s ease-out 2s both;
-        }
-
-        @keyframes countUp {
-            from { transform: scale(0.5); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        .stats-column {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .stat-item {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 249, 250, 0.9));
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 20px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(233, 236, 239, 0.3);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-item:nth-child(1) {
-            animation: slideInLeft 1s ease-out 2.2s both;
-        }
-
-        .stat-item:nth-child(2) {
-            animation: slideInLeft 1s ease-out 2.4s both;
-        }
-
-        .stat-item:nth-child(3) {
-            animation: slideInLeft 1s ease-out 2.6s both;
-        }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .stat-item::before {
+        .form-container::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, #28a745, #20c997);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
+            border-radius: 20px 20px 0 0;
         }
 
-        .stat-item:nth-child(2)::before {
-            background: linear-gradient(180deg, #dc3545, #fd7e14);
-        }
-
-        .stat-item:nth-child(3)::before {
-            background: linear-gradient(180deg, #ffc107, #fd7e14);
-        }
-
-        .stat-item:hover {
-            transform: translateX(10px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
-        }
-
-        .stat-item:hover::before {
-            transform: scaleY(1);
-        }
-
-        .stat-label {
+        .form-title {
+            font-size: 32px;
             color: #333;
-            font-weight: 600;
+            margin-bottom: 30px;
+            font-weight: 300;
+            text-align: center;
+            position: relative;
+        }
+
+        .form-title::after {
+            content: '📚';
+            position: absolute;
+            right: -40px;
+            top: 0;
+            font-size: 24px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .form-row {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            flex: 1;
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .form-group:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        .form-group:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group.full-width {
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .form-group:focus-within label {
+            color: #667eea;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            position: relative;
+        }
+
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        input[type="text"]:valid,
+        select:valid,
+        textarea:valid {
+            border-color: #4CAF50;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            cursor: pointer;
             font-size: 16px;
+            font-weight: 500;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            min-width: 200px;
         }
 
-        .stat-number {
-            font-size: 28px;
-            font-weight: 800;
-            color: #333;
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #764ba2, #f093fb);
+            transition: left 0.3s ease;
+            z-index: 1;
+        }
+
+        .submit-btn span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .submit-btn:hover::before {
+            left: 0;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .success-animation {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            z-index: 1000;
+            text-align: center;
+            opacity: 0;
+            scale: 0;
             transition: all 0.3s ease;
         }
 
-        .stat-item:hover .stat-number {
-            transform: scale(1.1);
+        .success-animation.show {
+            opacity: 1;
+            scale: 1;
+        }
+
+        .success-animation .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #4CAF50;
+            margin: 0 auto 20px;
+            position: relative;
+            animation: scaleIn 0.3s ease-in-out;
+        }
+
+        .success-animation .checkmark::after {
+            content: '✓';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0) rotate(180deg); }
+            100% { transform: scale(1) rotate(0deg); }
         }
 
         .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(233, 236, 239, 0.5);
-            border-radius: 4px;
-            margin-top: 20px;
-            overflow: hidden;
-            animation: fadeIn 1s ease-out 3s both;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #28a745, #20c997);
-            border-radius: 4px;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 0%;
-            animation: fillProgress 2s ease-out 3.2s both;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            z-index: 1000;
+            transition: width 0.3s ease;
         }
 
-        @keyframes fillProgress {
-            to { width: var(--progress-width); }
-        }
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .form-container {
+                padding: 20px;
+                margin: 0 10px;
+            }
+            
+            .header {
+                padding: 0 10px;
+            }
 
-        @media (max-width: 600px) {
-            .attendance-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .main-card {
-                padding: 25px;
-            }
-            
             .header h1 {
                 font-size: 24px;
             }
 
-            .card-title {
-                font-size: 28px;
-            }
-
-            .total-days-number {
-                font-size: 48px;
+            .form-title::after {
+                display: none;
             }
         }
 
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-            font-weight: 600;
+        /* Input validation animations */
+        .form-group.error input,
+        .form-group.error select,
+        .form-group.error textarea {
+            border-color: #f5576c;
+            animation: shake 0.5s ease-in-out;
         }
 
-        .notification.show {
-            transform: translateX(0);
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .form-group.success input,
+        .form-group.success select,
+        .form-group.success textarea {
+            border-color: #4CAF50;
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .typing-indicator.show {
+            opacity: 1;
+        }
+
+        .typing-indicator::after {
+            content: '✎';
+            color: #667eea;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -564,202 +470,217 @@
         <div class="floating-circle"></div>
     </div>
 
+    <div class="progress-bar" id="progressBar"></div>
+
     <div class="container">
         <div class="header">
-            <h1> Student Dashboard</h1>
-            <button class="logout-btn" onclick="handleLogout()">Logout</button>
+            <h1>Student Dashboard</h1>
+            <button class="logout-btn" onclick="handleLogout()">
+                <span>Logout</span>
+            </button>
         </div>
 
-        <div class="main-card">
-            <h2 class="card-title">📊 Attendance Summary</h2>
+        <div class="form-container">
+            <h2 class="form-title">Leave Application Form</h2>
             
-            <div class="month-selector">
-                <div class="month-dropdown">
-                    <div class="calendar-icon"></div>
-                    <select class="month-select" id="monthSelect" onchange="updateAttendance()">
-                        <option value="2025-06">June 2025</option>
-                        <option value="2025-05" selected>May 2025</option>
-                        <option value="2025-04">April 2025</option>
-                        <option value="2025-03">March 2025</option>
-                        <option value="2025-02">February 2025</option>
-                        <option value="2025-01">January 2025</option>
-                        <option value="2024-12">December 2024</option>
-                        <option value="2024-11">November 2024</option>
-                        <option value="2024-10">October 2024</option>
-                        <option value="2024-09">September 2024</option>
-                    </select>
-                </div>
-                <span class="select-month-text">Select Month</span>
-            </div>
-            
-            <div class="last-updated">Last Updated: <span id="lastUpdated">June 18, 2025</span></div>
-
-            <div class="attendance-section">
-                <h3 class="section-title">🏠 Hostel Attendance</h3>
-                
-                <div class="attendance-grid">
-                    <div class="total-days-card">
-                        <div class="total-days-label">Total Days</div>
-                        <div class="total-days-number" id="totalDays">31</div>
+            <form id="leaveForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="studentName">Student Name:</label>
+                        <div style="position: relative;">
+                            <input type="text" id="studentName" name="studentName" required>
+                            <div class="typing-indicator"></div>
+                        </div>
                     </div>
-                    
-                    <div class="stats-column">
-                        <div class="stat-item">
-                            <span class="stat-label">Present</span>
-                            <span class="stat-number" id="presentDays">23</span>
-                        </div>
-                        
-                        <div class="stat-item">
-                            <span class="stat-label">Absent</span>
-                            <span class="stat-number" id="absentDays">01</span>
-                        </div>
-                        
-                        <div class="stat-item">
-                            <span class="stat-label">On Leave</span>
-                            <span class="stat-number" id="leaveDays">07</span>
-                        </div>
+                    <div class="form-group">
+                        <label for="roomNo">Room No.:</label>
+                        <input type="text" id="roomNo" name="roomNo" required>
                     </div>
                 </div>
 
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="studentId">Student ID:</label>
+                        <input type="text" id="studentId" name="studentId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="leaveType">Type of Leave:</label>
+                        <select id="leaveType" name="leaveType" required>
+                            <option value="">Select leave type</option>
+                            <option value="short-term">Short term</option>
+                            <option value="long-term">Long term</option>
+                            <option value="emergency">Emergency leave</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" id="startDate" name="startDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">End Date:</label>
+                        <input type="date" id="endDate" name="endDate" required>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="reason">Reason for Leave:</label>
+                    <textarea id="reason" name="reason" placeholder="Please provide detailed reason for your leave application..." required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="personalContact">Personal Contact Number:</label>
+                        <input type="text" id="personalContact" name="personalContact" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="parentContact">Parent/Guardian Contact Number:</label>
+                        <input type="text" id="parentContact" name="parentContact" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <span>Submit Application</span>
+                </button>
+            </form>
         </div>
     </div>
 
-    <div class="notification" id="notification">
-        Attendance updated successfully! 🎉
+    <div class="success-animation" id="successAnimation">
+        <div class="checkmark"></div>
+        <h3>Success!</h3>
+        <p>Your leave application has been submitted successfully.</p>
     </div>
 
     <script>
-        // Sample attendance data for different months
-        const attendanceData = {
-            '2025-06': { total: 18, present: 15, absent: 1, leave: 2, lastUpdated: 'June 18, 2025' },
-            '2025-05': { total: 31, present: 23, absent: 1, leave: 7, lastUpdated: 'May 31, 2025' },
-            '2025-04': { total: 30, present: 22, absent: 2, leave: 6, lastUpdated: 'April 30, 2025' },
-            '2025-03': { total: 31, present: 25, absent: 1, leave: 5, lastUpdated: 'March 31, 2025' },
-            '2025-02': { total: 28, present: 20, absent: 3, leave: 5, lastUpdated: 'February 28, 2025' },
-            '2025-01': { total: 31, present: 18, absent: 2, leave: 11, lastUpdated: 'January 31, 2025' },
-            '2024-12': { total: 31, present: 24, absent: 1, leave: 6, lastUpdated: 'December 31, 2024' },
-            '2024-11': { total: 30, present: 26, absent: 0, leave: 4, lastUpdated: 'November 30, 2024' },
-            '2024-10': { total: 31, present: 27, absent: 1, leave: 3, lastUpdated: 'October 31, 2024' },
-            '2024-09': { total: 30, present: 25, absent: 2, leave: 3, lastUpdated: 'September 30, 2024' }
-        };
-
-        function animateNumber(element, start, end, duration) {
-            const range = end - start;
-            const increment = range / (duration / 16);
-            let current = start;
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
-                    current = end;
-                    clearInterval(timer);
-                }
-                element.textContent = Math.floor(current).toString().padStart(2, '0');
-            }, 16);
-        }
-
-        function showNotification() {
-            const notification = document.getElementById('notification');
-            notification.classList.add('show');
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        function updateAttendance() {
-            const selectedMonth = document.getElementById('monthSelect').value;
-            const data = attendanceData[selectedMonth];
-            
-            if (data) {
-                // Get current values for animation
-                const currentTotal = parseInt(document.getElementById('totalDays').textContent);
-                const currentPresent = parseInt(document.getElementById('presentDays').textContent);
-                const currentAbsent = parseInt(document.getElementById('absentDays').textContent);
-                const currentLeave = parseInt(document.getElementById('leaveDays').textContent);
-                
-                // Animate numbers
-                animateNumber(document.getElementById('totalDays'), currentTotal, data.total, 1000);
-                animateNumber(document.getElementById('presentDays'), currentPresent, data.present, 1200);
-                animateNumber(document.getElementById('absentDays'), currentAbsent, data.absent, 1400);
-                animateNumber(document.getElementById('leaveDays'), currentLeave, data.leave, 1600);
-                
-                // Update last updated date
-                document.getElementById('lastUpdated').textContent = data.lastUpdated;
-                
-                // Update progress bar
-                const attendancePercentage = (data.present / data.total) * 100;
-                const progressFill = document.getElementById('progressFill');
-                progressFill.style.setProperty('--progress-width', attendancePercentage + '%');
-                
-                // Update progress bar color based on attendance
-                if (attendancePercentage >= 80) {
-                    progressFill.style.background = 'linear-gradient(90deg, #28a745, #20c997)';
-                } else if (attendancePercentage >= 60) {
-                    progressFill.style.background = 'linear-gradient(90deg, #ffc107, #fd7e14)';
-                } else {
-                    progressFill.style.background = 'linear-gradient(90deg, #dc3545, #fd7e14)';
-                }
-                
-                // Reset animation
-                progressFill.style.animation = 'none';
-                setTimeout(() => {
-                    progressFill.style.animation = 'fillProgress 2s ease-out both';
-                }, 100);
-                
-                showNotification();
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('Logging out...');
+                // add the java script required, this would redirect to login page
             }
         }
 
-        function handleLogout() {
-            const btn = document.querySelector('.logout-btn');
-            btn.style.transform = 'scale(0.95)';
-            btn.textContent = 'Logging out...';
+         //this is the actual backend for storing data to your google sheets
+         const scriptURL = 'YOUR_WEB_APP_URL_HERE'; // ← replace with actual Web App URL
+          
+         document.getElementById("leaveForm").addEventListener("submit", function(e) {
+           e.preventDefault();
+       
+           const formData = {
+             studentName: document.getElementById("studentName").value,
+             roomNo: document.getElementById("roomNo").value,
+             studentId: document.getElementById("studentId").value,
+             leaveType: document.getElementById("leaveType").value,
+             startDate: document.getElementById("startDate").value,
+             endDate: document.getElementById("endDate").value,
+             reason: document.getElementById("reason").value,
+             personalContact: document.getElementById("personalContact").value,
+             parentContact: document.getElementById("parentContact").value
+           };
+       
+           fetch(scriptURL, {
+             method: 'POST',
+             body: JSON.stringify(formData),
+             headers: {
+               'Content-Type': 'application/json'
+             }
+           })
+           .then(response => {
+             alert("Leave application submitted successfully!");
+             document.getElementById("leaveForm").reset();
+           })
+           .catch(error => {
+             console.error("Error!", error.message);
+             alert("There was an error submitting the form.");
+           });
+         });
+
+         
+        //this java script is to add dynamics to front end
+        // Progress bar animation
+        function updateProgress() {
+            const form = document.getElementById('leaveForm');
+            const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+            let filled = 0;
             
-            setTimeout(() => {
-                btn.style.transform = 'scale(1)';
-                btn.textContent = 'Logout';
-                alert('Logout functionality would be implemented here!');
-            }, 1000);
+            inputs.forEach(input => {
+                if (input.value.trim() !== '') {
+                    filled++;
+                }
+            });
+            
+            const progress = (filled / inputs.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
         }
 
-        // Initialize progress bar on load
+        // Input validation and styling
+        function validateInput(input) {
+            const formGroup = input.closest('.form-group');
+            if (input.value.trim() === '') {
+                formGroup.classList.add('error');
+                formGroup.classList.remove('success');
+            } else {
+                formGroup.classList.remove('error');
+                formGroup.classList.add('success');
+            }
+        }
+
+        // Typing indicator
+        function showTypingIndicator(input) {
+            const indicator = input.parentElement.querySelector('.typing-indicator');
+            if (indicator) {
+                indicator.classList.add('show');
+                setTimeout(() => {
+                    indicator.classList.remove('show');
+                }, 1000);
+            }
+        }
+
+        // Add event listeners to all form inputs
         document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    updateProgress();
+                    validateInput(this);
+                    if (this.type === 'text' || this.tagName === 'TEXTAREA') {
+                        showTypingIndicator(this);
+                    }
+                });
+
+                input.addEventListener('blur', function() {
+                    validateInput(this);
+                });
+            });
+
+            // Initial progress update
+            updateProgress();
+        });
+
+        function showSuccessAnimation() {
+            const successAnimation = document.getElementById('successAnimation');
+            successAnimation.classList.add('show');
+            
             setTimeout(() => {
-                const data = attendanceData['2025-05'];
-                const attendancePercentage = (data.present / data.total) * 100;
-                const progressFill = document.getElementById('progressFill');
-                progressFill.style.setProperty('--progress-width', attendancePercentage + '%');
-            }, 3200);
-        });
-
-        // Add hover effects to stat items
-        document.querySelectorAll('.stat-item').forEach(item => {
-            item.addEventListener('mouseenter', function() {
-                this.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(240, 248, 255, 0.9))';
-            });
-            
-            item.addEventListener('mouseleave', function() {
-                this.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 249, 250, 0.9))';
-            });
-        });
-
-        // Add parallax effect to floating elements
-        document.addEventListener('mousemove', function(e) {
-            const circles = document.querySelectorAll('.floating-circle');
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            
-            circles.forEach((circle, index) => {
-                const speed = (index + 1) * 0.5;
-                const xPos = (x - 0.5) * speed * 20;
-                const yPos = (y - 0.5) * speed * 20;
-                circle.style.transform = `translate(${xPos}px, ${yPos}px)`;
-            });
-        });
+                successAnimation.classList.remove('show');
+            }, 3000);
+        }
+        
+       
+        // Add CSS animation for fadeOut
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                to {
+                    opacity: 0;
+                    transform: scale(0.8);
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
