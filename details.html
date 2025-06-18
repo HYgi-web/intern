@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Virangana Lakshmibai Girls' Hostel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 20s infinite linear;
+        }
+
+        .floating-circle:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-circle:nth-child(2) {
+            width: 40px;
+            height: 40px;
+            top: 60%;
+            right: 15%;
+            animation-delay: -5s;
+        }
+
+        .floating-circle:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            bottom: 30%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            33% { transform: translateY(-30px) rotate(120deg); opacity: 0.6; }
+            66% { transform: translateY(20px) rotate(240deg); opacity: 0.4; }
+            100% { transform: translateY(0px) rotate(360deg); opacity: 0.3; }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            margin-bottom: 30px;
+            animation: slideInDown 1s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #fff, #f0f8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logout-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .logout-btn:hover::before {
+            left: 100%;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .main-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .hostel-title {
+            font-size: 32px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .name-input-section {
+            margin-bottom: 30px;
+        }
+
+        .name-input {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .name-input label {
+            font-weight: 500;
+            color: #666;
+            min-width: 60px;
+        }
+
+        .name-input input {
+            border: none;
+            border-bottom: 2px solid #ddd;
+            padding: 8px 0;
+            font-size: 16px;
+            flex: 1;
+            max-width: 300px;
+            transition: border-color 0.3s ease;
+        }
+
+        .name-input input:focus {
+            outline: none;
+            border-bottom-color: #667eea;
+        }
+
+        .table-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .student-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .student-table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .student-table tr:hover {
+            background-color: #f8f9ff;
+        }
+
+        .details-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .details-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .details-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .hostel-title {
+                font-size: 24px;
+            }
+            
+            .student-table {
+                font-size: 12px;
+            }
+            
+            .student-table th,
+            .student-table td {
+                padding: 10px 8px;
+            }
+        }
+
+        /* Animation for page load */
+        .main-container {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+    </div>
+    <div class="container">
+    <div class="header">
+        <h1>Warden Dashboard</h1>
+        <button class="logout-btn" onclick="handleLogout()">Logout</button>
+    </div>
+
+    <div class="main-container">
+        <div class="content">
+            <h2 class="hostel-title">Virangana Lakshmibai Girls' Hostel</h2>
+            
+            <h3 class="section-title">Student Details</h3>
+            
+            <div class="name-input-section">
+                <div class="name-input">
+                    <label for="studentName">Name:</label>
+                    <input type="text" id="studentName" placeholder="Enter student name">
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="student-table">
+                    <thead>
+                        <tr>
+                            <th>Hostel ID</th>
+                            <th>Name</th>
+                            <th>Roll. No.</th>
+                            <th>Room No.</th>
+                            <th>Phone No.</th>
+                            <th>Email ID</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <tr>
+                            <td>H001</td>
+                            <td>Priya Sharma</td>
+                            <td>24/CS/001</td>
+                            <td>101</td>
+                            <td>9876543240</td>
+                            <td>priya.sharma@dtu.ac.in</td>
+                            <td><button class="details-btn" onclick="viewDetails('H001')">Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>H002</td>
+                            <td>Anjali Patel</td>
+                            <td>24/CS/002</td>
+                            <td>102</td>
+                            <td>9876543241</td>
+                            <td>anjali.patel@dtu.ac.in</td>
+                            <td><button class="details-btn" onclick="viewDetails('H002')">Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>H003</td>
+                            <td>Kavya Singh</td>
+                            <td>24/CS/003</td>
+                            <td>103</td>
+                            <td>9876543242</td>
+                            <td>kavya.singh@dtu.ac.in</td>
+                            <td><button class="details-btn" onclick="viewDetails('H003')">Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>H004</td>
+                            <td>Meera Gupta</td>
+                            <td>24/CS/004</td>
+                            <td>104</td>
+                            <td>9876543243</td>
+                            <td>meera.gupta@dtu.ac.in</td>
+                            <td><button class="details-btn" onclick="viewDetails('H004')">Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>H005</td>
+                            <td>Riya Jain</td>
+                            <td>24/CS/005</td>
+                            <td>105</td>
+                            <td>9876543244</td>
+                            <td>riya.jain@dtu.ac.in</td>
+                            <td><button class="details-btn" onclick="viewDetails('H005')">Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>H006</td>
+                            <td>Sania Khan</td>
+                            <td>24/CS/006</td>
+                            <td>106</td>
+                            <td>9876543245</td>
+                            <td>sania.khan@dtu.ac.in</td>
+                            <td><button class="details-btn" onclick="viewDetails('H006')">Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>H007</td>
+                            <td>Divya Reddy</td>
+                            <td>24/CS/007</td>
+                            <td>107</td>
+                            <td>9876543246</td>
+                            <td>divya.reddy@dtu.ac.in</td>
+                            <td><button class="details-btn" onclick="viewDetails('H007')">Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>H008</td>
+                            <td>Pooja Agarwal</td>
+                            <td>24/CS/008</td>
+                            <td>108</td>
+                            <td>9876543247</td>
+                            <td>pooja.agarwal@dtu.ac.in</td>
+                            <td><button class="details-btn" onclick="viewDetails('H008')">Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>H009</td>
+                            <td>Neha Verma</td>
+                            <td>24/CS/009</td>
+                            <td>109</td>
+                            <td>9876543248</td>
+                            <td>neha.verma@dtu.ac.in</td>
+                            <td><button class="details-btn" onclick="viewDetails('H009')">Details</button></td>
+                        </tr>
+                        <tr>
+                            <td>H010</td>
+                            <td>Shreya Das</td>
+                            <td>24/CS/010</td>
+                            <td>110</td>
+                            <td>9876543249</td>
+                            <td>shreya.das@dtu.ac.in</td>
+                            <td><button class="details-btn" onclick="viewDetails('H010')">Details</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+        function viewDetails(hostelId) {
+            alert(`Viewing details for Hostel ID: ${hostelId}\n\nThis would open the pdf of form submitted to hostel office.`);
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                alert('Logging out...');
+                // add the java script required, this would redirect to login page
+            }
+        }
+
+
+        // Add search functionality to the name input
+        document.getElementById('studentName').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const tableRows = document.querySelectorAll('#studentTableBody tr');
+            
+            tableRows.forEach(row => {
+                const nameCell = row.querySelector('td:nth-child(2)');
+                if (nameCell) {
+                    const name = nameCell.textContent.toLowerCase();
+                    if (name.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        // Add some interactive effects
+        document.querySelectorAll('.details-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.background = 'linear-gradient(135deg, #5a67d8, #6b46c1)';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+            });
+        });
+    </script>
+</body>
+</html>
