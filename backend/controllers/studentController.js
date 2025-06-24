@@ -24,7 +24,7 @@ exports.createStudent = (req, res) => {
   db.students.push(newStudent);
 
   res.status(201).json({
-    message: '✅ Student created successfully',
+    message: 'Student created successfully',
     studentId: newStudent.id
   });
 };
@@ -59,7 +59,7 @@ exports.updateStudent = (req, res) => {
     distanceFromHome
   };
 
-  res.status(200).json({ message: '✅ Student updated successfully' });
+  res.status(200).json({ message: 'Student updated successfully' });
 };
 
 exports.deleteStudent = (req, res) => {
@@ -72,5 +72,5 @@ exports.deleteStudent = (req, res) => {
 
   db.students.splice(index, 1);
 
-  res.status(200).json({ message: '✅ Student deleted successfully' });
+  res.status(200).json({ message: 'Student deleted successfully' });
 };
