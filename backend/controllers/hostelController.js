@@ -43,7 +43,7 @@ exports.applyForHostel = (req, res) => {
   db.students.push(newStudent);
 
   res.status(201).json({
-    message: '✅ Hostel application submitted successfully',
+    message: 'Hostel application submitted successfully',
     studentId: newStudent.id
   });
 };

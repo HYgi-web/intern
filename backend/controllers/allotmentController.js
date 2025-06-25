@@ -47,7 +47,7 @@ exports.runAllotment = (req, res) => {
     assignRoom(student, student.gender === 'male' ? maleHostels : femaleHostels);
   });
 
-  res.status(200).json({ message: '✅ Allotment process completed.' });
+  res.status(200).json({ message: ' Allotment process completed.' });
 };
 
 exports.getAllotments = (req, res) => {
