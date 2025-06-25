@@ -1,0 +1,246 @@
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model BasicDetails {
+  stud_rollno String   @id @db.VarChar(10)
+  stud_fname  String   @db.VarChar(50)
+  stud_mname  String?  @db.VarChar(50)
+  stud_lname  String?  @db.VarChar(50)
+  stud_email  String   @unique @db.VarChar(255)
+  adm_year    Int
+  gender      Gender
+  stud_phone  String   @db.Char(10)
+
+  RoomType    RoomType?
+}
+
+model RoomType {
+  roll_no       String   @id @db.VarChar(10)
+  room_prf1     RoomPref
+  room_prf2     RoomPref
+  room_prf3     RoomPref
+  room_prf4     RoomPref
+  partner1_roll String?  @db.VarChar(10)
+  partner1_name String?  @db.VarChar(100)
+  partner2_roll String?  @db.VarChar(10)
+  partner2_name String?  @db.VarChar(100)
+  bld_grp       String   @db.VarChar(5)
+  fd_choice     FoodChoice
+  adm_region    AdmRegion
+  chronic_prob  String?  @db.VarChar(100)
+  staying_hostel YesNo
+  profile_photo Bytes
+  signature     Bytes
+
+  basicDetails  BasicDetails @relation(fields: [roll_no], references: [stud_rollno], onDelete: Cascade, onUpdate: Cascade)
+  DelhiRegion   DelhiRegion?
+  AcademicDetails AcademicDetails?
+  BankDetails   BankDetails?
+  ParentDetails ParentDetails?
+  StudentAddress StudentAddress?
+  LocalGuardian LocalGuardianDetails?
+  Branch        Branch?
+  AllotResult   AllotResults?
+}
+
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+enum RoomPref {
+  AC_Triple_Seater
+  NON_AC_Single_Seater
+  NON_AC_Double_Seater
+  NON_AC_Triple_Seater
+}
+
+enum FoodChoice {
+  Veg
+  Non_veg
+}
+
+enum AdmRegion {
+  Delhi
+  Outside_Delhi
+  DASA
+}
+
+enum YesNo {
+  Yes
+  No
+}
+
+model DelhiRegion {
+  roll_no            String   @id @db.VarChar(10)
+  allotment_priority String?  @db.VarChar(100)
+  dist_dtu           Int
+
+  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model AcademicDetails {
+  roll_no        String   @id @db.VarChar(10)
+  cgpa           Decimal  @db.Decimal(3, 2)
+  course         AcademicCourse
+  back_paper     Int
+  last_institute String? @db.VarChar(100)
+
+  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model BankDetails {
+  roll_no          String   @id @db.VarChar(10)
+  bank_name        String?  @db.VarChar(100)
+  bank_holder_name String?  @db.VarChar(100)
+  acc_no           String?  @db.VarChar(20)
+  bank_ifsc        String?  @db.VarChar(20)
+  bank_branch      String?  @db.VarChar(100)
+  bank_address     String?  @db.VarChar(255)
+
+  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model ParentDetails {
+  roll_no            String   @id @db.VarChar(10)
+  parent_type        ParentType
+  parent_name        String   @db.VarChar(100)
+  parent_mobno       String   @db.Char(10)
+  parent_email       String   @db.VarChar(255)
+  parent_occupation  String?  @db.VarChar(255)
+  parent_designation String?  @db.VarChar(100)
+  p_office_addr      String?  @db.VarChar(255)
+  p_office_no        String?  @db.VarChar(50)
+
+  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model StudentAddress {
+  roll_no       String  @id @db.VarChar(10)
+  curr_address  String  @db.Text
+  is_same_addr  Boolean
+  perm_address  String  @db.Text
+
+  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model LocalGuardianDetails {
+  roll_no            String  @id @db.VarChar(10)
+  guardian_name      String  @db.VarChar(100)
+  guardian_phno      String  @db.Char(10)
+  guardian_email     String  @db.VarChar(255)
+  guardian_occupation String @db.VarChar(100)
+  guardian_addr      String  @db.Text
+
+  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Branch {
+  roll_no String @id @db.VarChar(10)
+  course  BTechBranch
+
+  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model AllotResults {
+  roll_no     String    @id @db.VarChar(10)
+  hostel_name String?   @db.VarChar(50)
+  room_no     String?   @db.VarChar(10)
+  room_type   RoomPref
+  hostel_id   String    @unique @db.VarChar(10)
+
+  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
+}
+
+
+
+
+
+//FEE SCHEMA
+
+model fee_record {
+  roll_no   String   @id
+  fee_paid  Decimal  @db.Decimal(10, 2)
+  fee_due   Decimal  @db.Decimal(10, 2)
+
+  // Relation to room_allocation.room_type (via roll_no)
+  room_type room_type @relation(fields: [roll_no], references: [roll_no])
+}
+
+//HOSTEL SCHEMA
+
+model hostel_warden_info {
+  hostel_name  String           @id @db.VarChar(100)
+  warden_name  String           @db.VarChar(100)
+  asst_warden  String           @db.VarChar(100)
+
+  hostel_type  hostel_type?
+  hostel_cap   hostel_cap?
+}
+
+model hostel_type {
+  hostel_name  String           @id @db.VarChar(100)
+  type_hostel  TypeHostel
+  room_type    RoomType
+
+  hostel_info  hostel_warden_info @relation(fields: [hostel_name], references: [hostel_name], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model hostel_cap {
+  hostel_name     String           @id @db.VarChar(100)
+  total_rooms     Int
+  stud_capacity   Int
+  occupied_rooms  Int
+  vacant_rooms    Int
+
+  hostel_info     hostel_warden_info @relation(fields: [hostel_name], references: [hostel_name], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model requests {
+  sno        Int               @id @default(autoincrement())
+  item_name  String            @db.VarChar(255)
+  item_qty   Int
+  reason     String            @db.Text
+  remarks    String?           @db.Text
+
+  approval   request_approval?
+}
+
+model request_approval {
+  sno             Int              @id
+  request_status  RequestStatus    @default(Submitted)
+
+  request         requests         @relation(fields: [sno], references: [sno], onDelete: Cascade, onUpdate: Cascade)
+}
+
+enum TypeHostel {
+  Girls
+  Boys
+}
+
+enum RoomType {
+  AC_Triple_Seater
+  NON_AC_Single_Seater
+  NON_AC_Double_Seater
+  NON_AC_Triple_Seater
+}
+
+enum RequestStatus {
+  Submitted
+  Under_process
+  Approved
+  Rejected
+  Completed
+}
+
+
+// 
