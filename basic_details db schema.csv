@@ -1,0 +1,9 @@
+Field,Type,Null,Key,Default,Extra
+stud_rollno,varchar(10),NO,PRI,NULL,
+stud_fname,varchar(50),NO,,NULL,
+stud_mname,varchar(50),YES,,NULL,
+stud_lname,varchar(50),YES,,NULL,
+stud_email,varchar(255),NO,,NULL,
+adm_year,int,NO,,NULL,
+gender,"enum('Male','Female','Other')",NO,,NULL,
+stud_phone,char(10),NO,,NULL,

@@ -1,0 +1,4 @@
+Field,Type,Null,Key,Default,Extra
+roll_no,varchar(10),NO,PRI,NULL,
+allotment_priority,varchar(100),YES,,NULL,
+dist_dtu,int,NO,,NULL,
