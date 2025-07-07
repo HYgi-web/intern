@@ -628,46 +628,83 @@
 
    
     <script>
-        // add functionality for print receipt with dynamic interactions
-       
+    const studentId = 123; // 🔁 Replace with actual ID or pull from localStorage/session
 
-        //logout functioning
-        function handleLogout() {
-            if (confirm('Are you sure you want to logout?')) {
-                alert('Logging out...');
-                // add the java script required, this would redirect to login page
-            }
+    // Handle logout
+    function handleLogout() {
+        if (confirm('Are you sure you want to logout?')) {
+            window.location.href = '/login.html'; // 🔁 Replace with actual login page
         }
+    }
 
-        //messages (can be changed by backend team as per requirement)
-        function processPayment(feeType) {
-            if (paymentStatus[feeType].paid) {
-                showNotification('Payment already completed!', 'info');
-                return;
-            }
+    // Payment processing function
+    async function processPayment(feeType) {
+        let endpoint = feeType === 'mess' ? '/api/messFeePayment' : '/api/hostelFeePayment';
 
-            // Show payment gateway redirect message (frontend only)
-            showNotification('Redirecting to payment gateway...', 'info');
-            
-            setTimeout(() => {
-                showNotification('This is a demo interface. Backend integration required for actual payments.', 'info');
-            }, 2000);
+        const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ studentId })
+        });
+
+        const data = await res.json();
+        showNotification(data.message || "Payment processed");
+
+        // ✅ Update UI on success
+        const feeItem = document.querySelector(`.fee-item.${feeType}-fees`);
+        const status = feeItem.querySelector('.fee-status');
+        const payButton = feeItem.querySelector('.pay-now-btn');
+        const printBtn = feeItem.querySelector('.print-btn');
+
+        if (status) status.textContent = "PAID BALANCE";
+        if (payButton) {
+            payButton.textContent = "Paid";
+            payButton.classList.remove('pay-now-btn');
+            payButton.classList.add('paid-btn');
+            payButton.disabled = true;
         }
-        //arrorw movement
-        function toggleDetails(arrow) {
-            const feeItem = arrow.closest('.fee-item');
-            const details = feeItem.querySelector('.fee-details-expanded');
-            
-            if (details.style.display === 'none' || details.style.display === '') {
-                details.style.display = 'block';
-                arrow.style.transform = 'rotate(180deg)';
-            } else {
-                details.style.display = 'none';
-                arrow.style.transform = 'rotate(0deg)';
-            }
+        if (printBtn) {
+            printBtn.style.opacity = "1";
+            printBtn.style.pointerEvents = "auto";
         }
+    }
 
-       
-    </script>
+    // Toggle details animation
+    function toggleDetails(arrow) {
+        const feeItem = arrow.closest('.fee-item');
+        const details = feeItem.querySelector('.fee-details-expanded');
+
+        if (!details) return;
+
+        const isVisible = details.style.display === 'block';
+        details.style.display = isVisible ? 'none' : 'block';
+        arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
+    }
+
+    // Show receipt (fix typo in hostel URL)
+    async function showReceipt(feeType) {
+        const url = feeType === 'mess' ? '/api/printMessFees' : '/api/printHostelFees';
+
+        const res = await fetch(`${url}?studentId=${studentId}`);
+        const data = await res.json();
+
+        alert("Receipt:\n" + JSON.stringify(data, null, 2));
+    }
+
+    // Toast-like notification
+    function showNotification(message, type = 'info') {
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notificationText');
+        notificationText.innerText = message;
+        notification.classList.add('show');
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+</script>
+
 </body>
 </html>

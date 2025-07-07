@@ -1,7 +1,7 @@
 let currentRole = "student";
 let currentUser = null;
 
-// Updated user data with student details
+// Dummy user data
 const usersData = {
   student: {
     username: "student",
@@ -75,6 +75,15 @@ function showDashboard(role) {
     ).join(", ");
   }
 
+  // Warden info
+  if (role === "warden" && currentUser) {
+    const nameEl = document.getElementById("wardenName");
+    if (nameEl) nameEl.textContent = currentUser.name;
+
+    const hostelEl = document.getElementById("wardenHostel");
+    if (hostelEl) hostelEl.textContent = "VLB Hostel"; // Hardcoded or replace dynamically
+  }
+
   if (role === "student") setTimeout(addPaymentButtons, 100);
   if (role === "warden") setTimeout(addRoomManagementFeatures, 100);
 }
@@ -88,7 +97,7 @@ function logout() {
   document.getElementById("loginForm").reset();
 }
 
-// Helper functions
+// Payment button for students
 function addPaymentButtons() {
   if (currentRole === "student") {
     const feeItems = document.querySelectorAll(".fee-item");
@@ -115,6 +124,7 @@ function payFee(feeType) {
   }
 }
 
+// Room management button for wardens
 function addRoomManagementFeatures() {
   if (currentRole === "warden") {
     const roomItems = document.querySelectorAll(".room-item");
@@ -134,91 +144,57 @@ function addRoomManagementFeatures() {
   }
 }
 
+// Notifications
 function showNotification(message, type = "info") {
   const notification = document.createElement("div");
   notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                background: ${
-                  type === "success"
-                    ? "#4caf50"
-                    : type === "error"
-                    ? "#f44336"
-                    : "#2196f3"
-                };
-                color: white;
-                border-radius: 5px;
-                z-index: 1000;
-                animation: slideIn 0.3s ease;
-            `;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background: ${
+      type === "success"
+        ? "#4caf50"
+        : type === "error"
+        ? "#f44336"
+        : "#2196f3"
+    };
+    color: white;
+    border-radius: 5px;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+  `;
   notification.textContent = message;
   document.body.appendChild(notification);
   setTimeout(() => notification.remove(), 3000);
 }
 
+// Notification animation
 const style = document.createElement("style");
 style.textContent = `@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }`;
 document.head.appendChild(style);
 
-// Event triggers
+// Auto-refresh dashboard data log
+setInterval(() => {
+  if (currentUser) console.log("Auto-refreshing dashboard data...");
+}, 30000);
+
+// Demo credentials note
 document.addEventListener("DOMContentLoaded", function () {
   const loginContainer = document.querySelector(".login-container");
   const demoInfo = document.createElement("div");
   demoInfo.style.cssText =
     "margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; font-size: 0.9rem; color: #666;";
   demoInfo.innerHTML = `
-                <strong>Demo Credentials:</strong><br>
-                Student: student / student123<br>
-                Warden: warden / warden123<br>
-                Authority: authority / authority123
-            `;
+    <strong>Demo Credentials:</strong><br>
+    Student: student / student123<br>
+    Warden: warden / warden123<br>
+    Authority: authority / authority123
+  `;
   loginContainer.appendChild(demoInfo);
 });
 
-setInterval(() => {
-  if (currentUser) console.log("Auto-refreshing dashboard data...");
-}, 30000);
-
-//dashboard opening fix
-document
-  .querySelectorAll(".dashboard")
-  .forEach((d) => d.classList.remove("active"));
-const dashboard = document.getElementById(role + "Dashboard");
-if (dashboard) dashboard.classList.add("active");
-
-//warden dashboard
-function showDashboard(role) {
-  document.getElementById("loginPage").style.display = "none";
-
-  // Hide all dashboards
-  document
-    .querySelectorAll(".dashboard")
-    .forEach((d) => d.classList.remove("active"));
-
-  // Show relevant dashboard
-  const dashboard = document.getElementById(role + "Dashboard");
-  if (dashboard) dashboard.classList.add("active");
-
-  if (role === "student" && currentUser) {
-    document.getElementById("studentName").textContent = currentUser.name;
-    document.getElementById("roomNo").textContent = currentUser.roomNo || "";
-    document.getElementById("hostelName").textContent =
-      currentUser.hostel || "";
-    document.getElementById("roommates").textContent = (
-      currentUser.roommates || []
-    ).join(", ");
-  }
-
-  if (role === "warden" && currentUser) {
-    const nameEl = document.getElementById("wardenName");
-    if (nameEl) nameEl.textContent = currentUser.name;
-
-    const hostelEl = document.getElementById("wardenHostel");
-    if (hostelEl) hostelEl.textContent = "VLB Hostel"; // Replace for dynamic names
-  }
-
-  if (role === "student") setTimeout(addPaymentButtons, 100);
-  if (role === "warden") setTimeout(addRoomManagementFeatures, 100);
+// Dummy function for room maintenance (you can customize this)
+function scheduleMaintenanceForRoom(roomNumber) {
+  alert(`Maintenance scheduled for Room ${roomNumber}`);
 }

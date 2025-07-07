@@ -1,10 +1,9 @@
 const db = require('../config/db');
 
-// Utility function to assign a room
+// Assigns student to a room in eligible hostels
 function assignRoom(student, hostels) {
   const eligibleHostels = hostels.filter(h =>
     h.gender === student.gender &&
-    h.programQuotas?.[student.program] > 0 &&
     h.rooms?.some(r => r.occupants < r.capacity)
   );
 
@@ -12,7 +11,6 @@ function assignRoom(student, hostels) {
     const room = hostel.rooms.find(r => r.occupants < r.capacity);
     if (room) {
       room.occupants++;
-      hostel.programQuotas[student.program]--;
 
       student.assignedHostel = hostel.name;
       student.assignedRoom = room.roomNumber;
@@ -36,18 +34,47 @@ exports.runAllotment = (req, res) => {
   const students = db.students;
   const hostels = db.hostels;
 
-  // Example: split by gender
-  const maleStudents = students.filter(s => s.gender === 'male');
-  const femaleStudents = students.filter(s => s.gender === 'female');
+  // Sort by priority: medical → PH → FY Outside Delhi → FY Delhi (by distance DESC) → Seniors no backlogs
+  const sortedStudents = students.sort((a, b) => {
+    if (a.medical && !b.medical) return -1;
+    if (!a.medical && b.medical) return 1;
+
+    if (a.ph && !b.ph) return -1;
+    if (!a.ph && b.ph) return 1;
+
+    const aIsFirstYear = a.year === 1;
+    const bIsFirstYear = b.year === 1;
+
+    const aOutsideDelhi = a.location !== 'Delhi';
+    const bOutsideDelhi = b.location !== 'Delhi';
+
+    if (aIsFirstYear && bIsFirstYear) {
+      if (aOutsideDelhi && !bOutsideDelhi) return -1;
+      if (!aOutsideDelhi && bOutsideDelhi) return 1;
+
+      // Both same category → sort by distance descending
+      return b.distance - a.distance;
+    }
+
+    if (aIsFirstYear && !bIsFirstYear) return -1;
+    if (!aIsFirstYear && bIsFirstYear) return 1;
+
+    // Seniors: prefer those without backlogs
+    if (!a.backlogs && b.backlogs) return -1;
+    if (a.backlogs && !b.backlogs) return 1;
+
+    return 0;
+  });
 
   const maleHostels = hostels.filter(h => h.gender === 'male');
   const femaleHostels = hostels.filter(h => h.gender === 'female');
 
-  [...maleStudents, ...femaleStudents].forEach(student => {
-    assignRoom(student, student.gender === 'male' ? maleHostels : femaleHostels);
+  sortedStudents.forEach(student => {
+    const genderHostels = student.gender === 'male' ? maleHostels : femaleHostels;
+    assignRoom(student, genderHostels);
   });
 
-  res.status(200).json({ message: ' Allotment process completed.' });
+  res.status(200).json({ message: 'Allotment completed with corrected priority order.' });
 };
 
 exports.getAllotments = (req, res) => {

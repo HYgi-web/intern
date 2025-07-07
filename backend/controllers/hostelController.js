@@ -11,13 +11,17 @@ exports.applyForHostel = (req, res) => {
     gender,
     program,
     year,
-    category,
+    location,           // 'Delhi' or 'Outside Delhi'
+    isPH,               // boolean
+    isNRI,              // optional
+    isForeign,          // optional
+    isMedicalCase,      // boolean
     distanceFromHome,
-    hasBacklogs,
-    preferenceList
+    hasBacklogs
   } = req.body;
 
-  if (!name || !rollNumber || !gender || !program || !year || !category) {
+  // Validation
+  if (!name || !rollNumber || !gender || !program || !year || !location) {
     return res.status(400).json({ error: 'Required student details missing' });
   }
 
@@ -33,10 +37,16 @@ exports.applyForHostel = (req, res) => {
     gender,
     program,
     year,
-    category,
-    distanceFromHome: Number(distanceFromHome),
-    hasBacklogs: Boolean(hasBacklogs),
-    preferenceList: preferenceList || [],
+    location,                // 'Delhi' or 'Outside Delhi'
+    medical: Boolean(isMedicalCase),
+    ph: Boolean(isPH),
+    nri: Boolean(isNRI),
+    foreign: Boolean(isForeign),
+    distance: Number(distanceFromHome),
+    backlogs: Boolean(hasBacklogs),
+    assignedHostel: null,
+    assignedRoom: null,
+    allotmentDate: null,
     status: 'Applied'
   };
 

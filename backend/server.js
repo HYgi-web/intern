@@ -13,13 +13,13 @@ const studentRoutes = require('./routes/studentRoutes');
 const hostelRoutes = require('./routes/hostelRoutes');
 const criteriaRoutes = require('./routes/criteriaRoutes');
 const allotmentRoutes = require('./routes/allotmentRoutes');
-
+const feeRoutes = require('./routes/fee');
 
 app.use('/api', studentRoutes);
 app.use('/api', hostelRoutes);
 app.use('/api', criteriaRoutes);
 app.use('/api', allotmentRoutes);
-
+app.use('/api', feeRoutes);  
 
 const PORT = 3000;
 app.get('/', (req, res) => {
