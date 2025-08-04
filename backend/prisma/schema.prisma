@@ -9,46 +9,189 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model BasicDetails {
-  stud_rollno String   @id @db.VarChar(10)
-  stud_fname  String   @db.VarChar(50)
-  stud_mname  String?  @db.VarChar(50)
-  stud_lname  String?  @db.VarChar(50)
-  stud_email  String   @unique @db.VarChar(255)
-  adm_year    Int
-  gender      Gender
-  stud_phone  String   @db.Char(10)
-
-  RoomType    RoomType?
+model Student {
+  studRollno     String         @id @db.VarChar(10)
+  studFname      String         @db.VarChar(50)
+  studMname      String?        @db.VarChar(50)
+  studLname      String?        @db.VarChar(50)
+  studEmail      String         @unique @db.VarChar(100)
+  admYear        Int
+  gender         Gender
+  studPhone      String         @db.VarChar(15)
+  roomType       RoomPreferenceInfo?
+  delhiRegion    DelhiRegion?
+  academicInfo   AcademicDetails?
+  bankDetails    BankDetails?
+  parentInfo     ParentDetails?
+  address        StudentAddress?
+  guardian       LocalGuardian?
+  branch         Branch?
+  allotments     Allotment[]    @relation("StudentAllotments")
+  roomAsStudent1 Room?          @relation("RoomStudent1")
+  roomAsStudent2 Room?          @relation("RoomStudent2")
+  roomAsStudent3 Room?          @relation("RoomStudent3")
+  applicationStatus ApplicationStatus @default(Draft)
+  submittedAt     DateTime?
 }
 
-model RoomType {
-  roll_no       String   @id @db.VarChar(10)
-  room_prf1     RoomPref
-  room_prf2     RoomPref
-  room_prf3     RoomPref
-  room_prf4     RoomPref
-  partner1_roll String?  @db.VarChar(10)
-  partner1_name String?  @db.VarChar(100)
-  partner2_roll String?  @db.VarChar(10)
-  partner2_name String?  @db.VarChar(100)
-  bld_grp       String   @db.VarChar(5)
-  fd_choice     FoodChoice
-  adm_region    AdmRegion
-  chronic_prob  String?  @db.VarChar(100)
-  staying_hostel YesNo
-  profile_photo Bytes
-  signature     Bytes
+model RoomPreferenceInfo {
+  rollNo        String @id @db.VarChar(10)
+  roomPrf1      RoomType
+  roomPrf2      RoomType
+  roomPrf3      RoomType
+  roomPrf4      RoomType
+  bldGrp        BloodGroup
+  fdChoice      FoodChoice
+  admRegion     AdmissionRegion
+  chronicProb   String?   @db.VarChar(255)
+  stayingHostel YesNo
+  profilePhoto  Bytes?
+  signature     Bytes?
+  student       Student @relation(fields: [rollNo], references: [studRollno])
+}
 
-  basicDetails  BasicDetails @relation(fields: [roll_no], references: [stud_rollno], onDelete: Cascade, onUpdate: Cascade)
-  DelhiRegion   DelhiRegion?
-  AcademicDetails AcademicDetails?
-  BankDetails   BankDetails?
-  ParentDetails ParentDetails?
-  StudentAddress StudentAddress?
-  LocalGuardian LocalGuardianDetails?
-  Branch        Branch?
-  AllotResult   AllotResults?
+model DelhiRegion {
+  rollNo           String @id @db.VarChar(10)
+  allotmentPriority String? @db.VarChar(50)
+  distDtu          Int
+  student          Student @relation(fields: [rollNo], references: [studRollno])
+}
+
+model AcademicDetails {
+  rollNo        String @id @db.VarChar(10)
+  cgpa          Float
+  course        AcademicCourse
+  backPaper     Int
+  lastInstitute String? @db.VarChar(100)
+  student       Student @relation(fields: [rollNo], references: [studRollno])
+}
+
+model BankDetails {
+  rollNo        String @id @db.VarChar(10)
+  bankName      String? @db.VarChar(100)
+  bankHolderName String? @db.VarChar(100)
+  accNo         String? @db.VarChar(20)
+  bankIfsc      String? @db.VarChar(20)
+  bankBranch    String? @db.VarChar(100)
+  bankAddress   String? @db.VarChar(255)
+  student       Student @relation(fields: [rollNo], references: [studRollno])
+}
+
+model ParentDetails {
+  rollNo           String @id @db.VarChar(10)
+  parentType       ParentType
+  parentName       String @db.VarChar(100)
+  parentMobno      String @db.VarChar(15)
+  parentEmail      String @db.VarChar(100)
+  parentOccupation String? @db.VarChar(100)
+  parentDesignation String? @db.VarChar(100)
+  pOfficeAddr      String? @db.VarChar(255)
+  pOfficeNo        String? @db.VarChar(15)
+  student          Student @relation(fields: [rollNo], references: [studRollno])
+}
+
+model StudentAddress {
+  rollNo      String @id @db.VarChar(10)
+  currAddress String @db.VarChar(255)
+  isSameAddr  Boolean
+  permAddress String @db.VarChar(255)
+  student     Student @relation(fields: [rollNo], references: [studRollno])
+}
+
+model LocalGuardian {
+  rollNo            String @id @db.VarChar(10)
+  guardianName      String @db.VarChar(100)
+  guardianPhno      String @db.VarChar(15)
+  guardianEmail     String @db.VarChar(100)
+  guardianOccupation String @db.VarChar(100)
+  guardianAddr      String @db.VarChar(255)
+  student           Student @relation(fields: [rollNo], references: [studRollno])
+}
+
+model Branch {
+  rollNo  String @id @db.VarChar(10)
+  course  BranchCourse
+  student Student @relation(fields: [rollNo], references: [studRollno])
+}
+
+model Hostel {
+  id           String      @id @db.VarChar(10)
+  hostelName   String      @unique @db.VarChar(100)
+  wardenName   String      @db.VarChar(100)
+  asstWarden   String      @db.VarChar(100)
+  genderType   HostelGender
+  roomType     RoomType
+  capacity     HostelCapacity?
+  rooms        Room[]
+  allotments   Allotment[]
+}
+
+model HostelCapacity {
+  id           String  @id @db.VarChar(10)
+  hostelId     String  @unique @db.VarChar(10)
+  totalRooms   Int
+  totalBeds    Int
+  occupiedBeds Int @default(0)
+  hostel       Hostel? @relation(fields: [hostelId], references: [id])
+}
+
+model Room {
+  id          String      @id @db.VarChar(10)
+  hostelId    String      @db.VarChar(10)
+  roomNumber  String      @db.VarChar(10)
+  student1Id  String?     @unique @db.VarChar(10)
+  student2Id  String?     @unique @db.VarChar(10)
+  student3Id  String?     @unique @db.VarChar(10)
+  currentOccupancy Int @default(0)
+  
+  hostel      Hostel      @relation(fields: [hostelId], references: [id])
+  student1    Student?    @relation("RoomStudent1", fields: [student1Id], references: [studRollno])
+  student2    Student?    @relation("RoomStudent2", fields: [student2Id], references: [studRollno])
+  student3    Student?    @relation("RoomStudent3", fields: [student3Id], references: [studRollno])
+  allotments  Allotment[]
+  
+  @@unique([hostelId, roomNumber])
+}
+
+model Allotment {
+  id          String      @id @db.VarChar(10)
+  rollNo      String      @db.VarChar(10)
+  hostelId    String      @db.VarChar(10)
+  roomId      String      @db.VarChar(10)
+  bedNumber   Int
+  allotDate   DateTime    @default(now())
+  status      AllotmentStatus @default(Active)
+  
+  student     Student     @relation(fields: [rollNo], references: [studRollno], name: "StudentAllotments")
+  hostel      Hostel      @relation(fields: [hostelId], references: [id])
+  room        Room        @relation(fields: [roomId], references: [id])
+}
+
+// Enums
+enum StudStatus {
+  Present
+  Absent
+  Leave
+}
+
+enum RoomType {
+  AC_Triple_Seater       @map("AC: Triple Seater")
+  NonAC_Single_Seater    @map("NON AC: Single Seater")
+  NonAC_Double_Seater    @map("NON AC: Double Seater")
+  NonAC_Triple_Seater    @map("NON AC: Triple Seater")
+}
+
+enum HostelGender {
+  Girls
+  Boys
+}
+
+enum RequestStatus {
+  Submitted
+  UnderProcess
+  Approved
+  Rejected
+  Completed
 }
 
 enum Gender {
@@ -57,21 +200,14 @@ enum Gender {
   Other
 }
 
-enum RoomPref {
-  AC_Triple_Seater
-  NON_AC_Single_Seater
-  NON_AC_Double_Seater
-  NON_AC_Triple_Seater
-}
-
 enum FoodChoice {
   Veg
-  Non_veg
+  NonVeg
 }
 
-enum AdmRegion {
+enum AdmissionRegion {
   Delhi
-  Outside_Delhi
+  OutsideDelhi
   DASA
 }
 
@@ -80,167 +216,94 @@ enum YesNo {
   No
 }
 
-model DelhiRegion {
-  roll_no            String   @id @db.VarChar(10)
-  allotment_priority String?  @db.VarChar(100)
-  dist_dtu           Int
-
-  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
+enum ParentType {
+  Father
+  Mother
 }
 
-model AcademicDetails {
-  roll_no        String   @id @db.VarChar(10)
-  cgpa           Decimal  @db.Decimal(3, 2)
-  course         AcademicCourse
-  back_paper     Int
-  last_institute String? @db.VarChar(100)
-
-  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
+enum AcademicCourse {
+  Btech
+  Mtech
+  PhD
+  BDesign
+  MDesign
+  MSc
+  MBA
+  IMSC
 }
 
-model BankDetails {
-  roll_no          String   @id @db.VarChar(10)
-  bank_name        String?  @db.VarChar(100)
-  bank_holder_name String?  @db.VarChar(100)
-  acc_no           String?  @db.VarChar(20)
-  bank_ifsc        String?  @db.VarChar(20)
-  bank_branch      String?  @db.VarChar(100)
-  bank_address     String?  @db.VarChar(255)
-
-  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
+enum BranchCourse {
+  AE
+  BT
+  CE
+  CH
+  CO
+  EC
+  EE
+  EL
+  EN
+  EP
+  IT
+  MC
+  ME
+  PE
+  PS
+  SE
 }
 
-model ParentDetails {
-  roll_no            String   @id @db.VarChar(10)
-  parent_type        ParentType
-  parent_name        String   @db.VarChar(100)
-  parent_mobno       String   @db.Char(10)
-  parent_email       String   @db.VarChar(255)
-  parent_occupation  String?  @db.VarChar(255)
-  parent_designation String?  @db.VarChar(100)
-  p_office_addr      String?  @db.VarChar(255)
-  p_office_no        String?  @db.VarChar(50)
-
-  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
+enum BloodGroup {
+  A_Positive  @map("A+")
+  A_Negative  @map("A-")
+  B_Positive  @map("B+")
+  B_Negative  @map("B-")
+  AB_Positive @map("AB+")
+  AB_Negative @map("AB-")
+  O_Positive  @map("O+")
+  O_Negative  @map("O-")
 }
 
-model StudentAddress {
-  roll_no       String  @id @db.VarChar(10)
-  curr_address  String  @db.Text
-  is_same_addr  Boolean
-  perm_address  String  @db.Text
-
-  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
-}
-
-model LocalGuardianDetails {
-  roll_no            String  @id @db.VarChar(10)
-  guardian_name      String  @db.VarChar(100)
-  guardian_phno      String  @db.Char(10)
-  guardian_email     String  @db.VarChar(255)
-  guardian_occupation String @db.VarChar(100)
-  guardian_addr      String  @db.Text
-
-  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
-}
-
-model Branch {
-  roll_no String @id @db.VarChar(10)
-  course  BTechBranch
-
-  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
-}
-
-model AllotResults {
-  roll_no     String    @id @db.VarChar(10)
-  hostel_name String?   @db.VarChar(50)
-  room_no     String?   @db.VarChar(10)
-  room_type   RoomPref
-  hostel_id   String    @unique @db.VarChar(10)
-
-  RoomType RoomType @relation(fields: [roll_no], references: [roll_no], onDelete: Cascade, onUpdate: Cascade)
-}
-
-
-
-
-
-//FEE SCHEMA
-
-model fee_record {
-  roll_no   String   @id
-  fee_paid  Decimal  @db.Decimal(10, 2)
-  fee_due   Decimal  @db.Decimal(10, 2)
-
-  // Relation to room_allocation.room_type (via roll_no)
-  room_type room_type @relation(fields: [roll_no], references: [roll_no])
-}
-
-//HOSTEL SCHEMA
-
-model hostel_warden_info {
-  hostel_name  String           @id @db.VarChar(100)
-  warden_name  String           @db.VarChar(100)
-  asst_warden  String           @db.VarChar(100)
-
-  hostel_type  hostel_type?
-  hostel_cap   hostel_cap?
-}
-
-model hostel_type {
-  hostel_name  String           @id @db.VarChar(100)
-  type_hostel  TypeHostel
-  room_type    RoomType
-
-  hostel_info  hostel_warden_info @relation(fields: [hostel_name], references: [hostel_name], onDelete: Cascade, onUpdate: Cascade)
-}
-
-model hostel_cap {
-  hostel_name     String           @id @db.VarChar(100)
-  total_rooms     Int
-  stud_capacity   Int
-  occupied_rooms  Int
-  vacant_rooms    Int
-
-  hostel_info     hostel_warden_info @relation(fields: [hostel_name], references: [hostel_name], onDelete: Cascade, onUpdate: Cascade)
-}
-
-model requests {
-  sno        Int               @id @default(autoincrement())
-  item_name  String            @db.VarChar(255)
-  item_qty   Int
-  reason     String            @db.Text
-  remarks    String?           @db.Text
-
-  approval   request_approval?
-}
-
-model request_approval {
-  sno             Int              @id
-  request_status  RequestStatus    @default(Submitted)
-
-  request         requests         @relation(fields: [sno], references: [sno], onDelete: Cascade, onUpdate: Cascade)
-}
-
-enum TypeHostel {
-  Girls
-  Boys
-}
-
-enum RoomType {
-  AC_Triple_Seater
-  NON_AC_Single_Seater
-  NON_AC_Double_Seater
-  NON_AC_Triple_Seater
-}
-
-enum RequestStatus {
-  Submitted
-  Under_process
-  Approved
-  Rejected
+enum AllotmentStatus {
+  Active
+  Provisional
+  Cancelled
   Completed
 }
 
+enum ApplicationStatus {
+  Draft
+  Submitted
+  UnderReview
+  Approved
+  Rejected
+  Waitlisted
+}
 
-// 
+
+
+
+/*
+// These models will be added later:
+
+// feeRecord    FeeRecord?              // Will be added later
+  // hostelAttendances HostelAttendance[] // Will be added later
+  // messAttendances   MessAttendance[]   // Will be added later
+  // surrender    Surrender?              // Will be added later, should be here?
+
+model FeeRecord {
+  // Will be implemented after initial setup
+}
+
+model HostelAttendance {
+  // Will be implemented after initial setup
+}
+
+model MessAttendance {
+  // Will be implemented after initial setup
+}
+
+model Surrender {
+  // Will be implemented after initial setup
+}
+
+
+*/
